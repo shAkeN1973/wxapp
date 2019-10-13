@@ -1,7 +1,9 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "compoents/article/article",
+    "compoents/list/list"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -9,5 +11,16 @@
     "navigationBarTitleText": "WeChat",
     "navigationBarTextStyle": "white"
   },
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "tabBar": {
+    "list": [{
+      "pagePath": "pages/logs/logs",
+      "text": "wtf"
+    },
+    {
+      "pagePath":"pages/index/index",
+      "text":"hahaha"
+    }]
+  }
+  
 }

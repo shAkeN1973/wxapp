@@ -7,7 +7,11 @@
       <text class="userinfo-nickname">{{userInfo.nickName}}</text>
     </block>
   </view>
+  <view><button bindtap="testName">123</button></view>
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
   </view>
 </view>
+<text>当前事件：{{time}}</text>
+
+

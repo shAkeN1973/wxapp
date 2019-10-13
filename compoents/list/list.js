@@ -1,4 +1,4 @@
-var base64 = require("../images/base64");
+//var base64 = require("../images/base64");
 Page({
     onLoad: function(){
         this.setData({
