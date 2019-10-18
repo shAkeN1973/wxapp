@@ -3,7 +3,8 @@
     "pages/index/index",
     "pages/logs/logs",
     "compoents/article/article",
-    "compoents/list/list"
+    "compoents/list/list",
+    "pages/getUserInfo/getUserInfo"
   ],
   "window": {
     "backgroundTextStyle": "dark",

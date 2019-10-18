@@ -59,7 +59,7 @@ Page({
     this.setData(
       {time:20});
     wx.navigateTo({
-      url: '../logs/logs',
+      url: '../getUserInfo/getUserInfo',
     })
   }
 })
