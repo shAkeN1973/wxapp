@@ -5,7 +5,16 @@ App({
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
-
+    //get system information
+    /*wx.getSystemInfo({
+      success: e => {
+        this.globalData.StatusBar = e.statusBarHeight;
+        let custom = wx.getMenuButtonBoundingClientRect();
+        this.globalData.Custom = custom;
+        this.globalData.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
+      }
+    })*/
+  
     // 登录
     wx.login({
       success: res => {
@@ -31,7 +40,19 @@ App({
           })
         }
       }
-    })
+    }),
+      wx.getSystemInfo({
+        success: e => {
+          this.globalData.StatusBar = e.statusBarHeight;
+          let capsule = wx.getMenuButtonBoundingClientRect();
+          if (capsule) {
+            this.globalData.Custom = capsule;
+            this.globalData.CustomBar = capsule.bottom + capsule.top - e.statusBarHeight;
+          } else {
+            this.globalData.CustomBar = e.statusBarHeight + 50;
+          }
+        }
+      })
   },
   globalData: {
     userInfo: null

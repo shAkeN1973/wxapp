@@ -1,7 +1,7 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs",
+    "pages/plan/plan",
     "compoents/article/article",
     "compoents/list/list",
     "pages/getUserInfo/getUserInfo"
@@ -10,18 +10,22 @@
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#000",
     "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle": "white"
+    "navigationBarTextStyle": "white",
+    "navigationStyle": "custom"
   },
   "sitemapLocation": "sitemap.json",
   "tabBar": {
     "list": [{
-      "pagePath": "pages/logs/logs",
+      "pagePath": "pages/plan/plan",
       "text": "wtf"
     },
     {
       "pagePath":"pages/index/index",
       "text":"hahaha"
     }]
+  },
+  "usingComponents": {
+    "cu-custom": "/colorui/components/cu-custom"
   }
   
 }
