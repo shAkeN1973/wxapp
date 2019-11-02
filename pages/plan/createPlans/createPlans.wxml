@@ -1,0 +1,2 @@
+<input confirm-type="send" type="text" maxlength="10" placeholder="please input some information"/>
+<view>yougotme!</view>

@@ -1,7 +1,9 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/plan/plan",
+    "pages/plan/plansIndex/plansIndex",
+    "pages/plan/conditions/conditions",
+    "pages/plan/createPlans/createPlans",
     "compoents/article/article",
     "compoents/list/list",
     "pages/getUserInfo/getUserInfo"
@@ -10,13 +12,13 @@
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#000",
     "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle": "white",
-    "navigationStyle": "custom"
+    "navigationBarTextStyle": "white"
+    
   },
   "sitemapLocation": "sitemap.json",
   "tabBar": {
     "list": [{
-      "pagePath": "pages/plan/plan",
+      "pagePath": "pages/plan/plansIndex/plansIndex",
       "text": "wtf"
     },
     {
