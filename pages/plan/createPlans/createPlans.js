@@ -23,6 +23,19 @@ Submit: function(e)
     console.log("下面是Data中的数据");
     const eventChannel=this.getOpenerEventChannel();//注意这里必须新声明一个新的eventChannel
     eventChannel.emit('acceptDataFromHidePlanPage', { data: this.data.test });
+
+
+    wx.request({
+      url: ' https://easy-mock.com/mock/5dc57d6e2b69d9223b633bb3/example/xjtu',
+      data:{
+        uname:"hahaha"
+      },
+      method:"GET",
+      header:{"content-type": "application/json "},
+      success:function(res){
+          console.log(res.data)
+      }
+    })
    }
 },
   /**

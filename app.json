@@ -19,12 +19,20 @@
   "tabBar": {
     "list": [{
       "pagePath": "pages/plan/plansIndex/plansIndex",
-      "text": "wtf"
+      "text": "服药计划",
+      "iconPath":"images/plan.png"
     },
     {
       "pagePath":"pages/index/index",
-      "text":"hahaha"
-    }]
+      "text":"欢迎页",
+      "iconPath": "images/welcome.png"
+    },
+    {
+      "pagePath": "pages/getUserInfo/getUserInfo",
+      "text": "我的",
+      "iconPath": "images/my.png"
+    }
+    ]
   },
   "usingComponents": {
     "cu-custom": "/colorui/components/cu-custom"
