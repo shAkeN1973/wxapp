@@ -2,6 +2,7 @@
 //获取应用实例
 const app = getApp()
 
+//const aliyunOpt = require('../../utils/aliyun/aliyun_connect.js')
 Page({
   data: {
     motto: 'Hello World',

@@ -6,8 +6,49 @@ Page({
   data: {
     test:"",
     isSubmit:false,
-    N:{}
+    N:{},
+    index:null,
+    picker:["1","2","3","4","5","6","7","8"],
+    howMany:"0",
+      data1:"2019-07-01",
+      data2: "2019-07-01",
+    array:[
+    {
+    name1:"",
+    eatTime:"",
+    oneDay:""
+    },
+      {
+        name1: "",
+        eatTime: "",
+        oneDay: ""
+      },
+    ]
   },
+  PickerChange(e) {
+    console.log(e);
+    this.setData({
+      index: e.detail.value,
+    })
+  },
+  DateChange(e) {
+    this.setData({
+      data1: e.detail.value
+    })
+  },
+  SM:function(){
+    setTimeout(function(){
+    wx.showToast({
+      title: '上传成功',
+      icon:'success',
+      duration: 2000
+    })},2000),
+    wx.showToast({
+      title: '正在上传',
+      icon: 'loading',
+      duration: 2000
+  })},
+
 /*表单提交函数*/
 Submit: function(e)
 {
@@ -23,19 +64,6 @@ Submit: function(e)
     console.log("下面是Data中的数据");
     const eventChannel=this.getOpenerEventChannel();//注意这里必须新声明一个新的eventChannel
     eventChannel.emit('acceptDataFromHidePlanPage', { data: this.data.test });
-
-
-    wx.request({
-      url: ' https://easy-mock.com/mock/5dc57d6e2b69d9223b633bb3/example/xjtu',
-      data:{
-        uname:"hahaha"
-      },
-      method:"GET",
-      header:{"content-type": "application/json "},
-      success:function(res){
-          console.log(res.data)
-      }
-    })
    }
 },
   /**
