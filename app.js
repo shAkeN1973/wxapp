@@ -1,4 +1,18 @@
 //app.js
+import mqtt from './library/mqtt.js';
+
+const host =
+'wxs://www.xjtuzhijiysx.cn/mqtt';
+const options = {
+  protocolVersion: 4, //MQTT连接协议版本
+  clientId: randomString(10),
+  clean: true,
+  username: '1v1r5ep/zhihu_iamliubo',
+  password: 'tNVKODyl2chbm5yp',
+  reconnectPeriod: 1000,
+  connectTimeout: 30 * 1000,
+  resubscribe: true
+};
 App({
   onLaunch: function () {
     // 展示本地存储能力
@@ -54,7 +68,23 @@ App({
         }
       })
   },
+
+
   globalData: {
-    userInfo: null
+    userInfo: null,
+    client_ID: randomString(10),
+    client: mqtt.connect(host, options),
   }
 })
+
+
+function randomString(len) {
+  len = len || 32;
+  var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+  var maxPos = $chars.length;
+  var pwd = '';
+  for (let i = 0; i < len; i++) {
+    pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+  }
+  return pwd;
+}
