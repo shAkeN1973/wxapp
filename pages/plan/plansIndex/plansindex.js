@@ -3,7 +3,7 @@ Page({
   data: {
     logs: [],
   },
-  onLoad: function () {
+  onLoad: function () {//从远端获得
     /*this.setData({
       logs: (wx.getStorageSync('logs') || []).map(log => {
         return util.formatTime(new Date(log))

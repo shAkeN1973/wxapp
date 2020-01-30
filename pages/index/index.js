@@ -28,7 +28,7 @@ Page({
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     time:(new Date()).toString()
   },
-   
+
   
  
   //事件处理函数
@@ -86,6 +86,7 @@ Page({
     testValue="test";
     console.log(this.testValue);
     console.log(testValue);
+    
    /* 
     const client = mqtt.connect(host, options);
     console.log(options.clientId);
@@ -100,6 +101,7 @@ Page({
 
     var that = this;
     that.data.client=app.globalData.client;
+  
     that.data.client.on('connect',e=>{
       console.log("ok");
       that.data.client.subscribe('presence',function(err){
