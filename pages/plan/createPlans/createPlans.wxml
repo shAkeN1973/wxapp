@@ -1,5 +1,5 @@
 
-	<view class="cu-form-group margin-top">
+<view class="cu-form-group margin-top">
 		<view class="title">请选择本次服药计划共几类药物</view>
 		<picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
 			<view class="picker">
