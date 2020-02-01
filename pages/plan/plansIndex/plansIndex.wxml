@@ -1,4 +1,4 @@
-<!--logs.wxml-->
+<!--plansIndex.wxml-->
 <scroll-view scroll-y class="scrollPage">
 <view class="cu-bar bg-white solid-bottom">
   <view class="action">

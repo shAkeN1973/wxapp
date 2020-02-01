@@ -1,3 +1,5 @@
+
+
 Page({
 
   /**
@@ -7,29 +9,29 @@ Page({
     test:"",
     isSubmit:false,
     N:{},
-    index:null,
-    picker:["1","2","3","4","5","6","7","8"],
+    index:null,                                //默认数组的当前下标名
+    size:null,
+    index2:null,
+   
+    picker:["1","2","3","4","5","6","7","8"],  //选择有多少种药物
     howMany:"0",
       data1:"2019-07-01",
       data2: "2019-07-01",
-    array:[
-    {
-    name1:"",
-    eatTime:"",
-    oneDay:""
-    },
-      {
-        name1: "",
-        eatTime: "",
-        oneDay: ""
-      },
-    ]
+    array:[],
   },
   PickerChange(e) {
     console.log(e);
     this.setData({
       index: e.detail.value,
-    })
+    });
+    var size =parseInt(this.data.index);
+    var arr=new Array(size+1);
+    this.setData({
+      array: arr,
+    });
+    console.log(this.data.array);
+    console.log(typeof(size));
+   // this.onLoad();
   },
   DateChange(e) {
     this.setData({
