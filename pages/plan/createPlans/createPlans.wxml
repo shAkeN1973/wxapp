@@ -8,18 +8,16 @@
 		</picker>
 	</view>
 <view wx:if="{{index != null}}">
-  <block wx:for="{{array}}"> 
-  <block>
+  <block wx:for="{{array}}" wx:key="symbol" wx:for-item="item"> 
   	<view class="cu-form-group">
 		<view class="title">药物</view>
-		<input placeholder="药名"></input>
+		<input placeholder="药名" bindinput="Submit"></input>
 	</view>
-  </block>
   <view class="cu-form-group">
 		  <view class="title">日期选择</view>
-		  <picker mode="date" value="{{data1}}" start="2015-09-01" end="2020-09-01" bindchange="DateChange">
+		  <picker mode="date" value="{{date1}}" start="2015-09-01" end="2020-09-01" bindchange="DateChange">
         <view class="picker">
-				{{data1}}</view>
+				{{item.date}}</view>
         </picker>
 	</view>
   <view class="cu-form-group">

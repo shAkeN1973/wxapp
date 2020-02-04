@@ -1,72 +1,132 @@
-
-
+/*creatPlans.js*/
+var number=null;
+var temp=null;
+var upLoadArray=new Array();
+var plans= {
+  name: "",
+  date: "",
+  lengthOfTime: null,
+  frenquency: null,
+  afterOrBefore: null,
+  }
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     test:"",
     isSubmit:false,
     N:{},
     index:null,                                //默认数组的当前下标名
-    size:null,
-    index2:null,
-   
     picker:["1","2","3","4","5","6","7","8"],  //选择有多少种药物
     howMany:"0",
-      data1:"2019-07-01",
-      data2: "2019-07-01",
+    date1:"2019-07-01",
+    date2: "2019-07-01",
     array:[],
   },
+
   PickerChange(e) {
-    console.log(e);
     this.setData({
       index: e.detail.value,
     });
-    var size =parseInt(this.data.index);
-    var arr=new Array(size+1);
+    var size =parseInt(this.data.index);  //index为字符串，parseInt将其转化为数值
+    number=size;                        //设立哨兵
+    temp=0;                            //
+    var arr=new Array();
+    for(var i=0;i<size+1;i++)
+    {
+      arr.push({"symbol":"symbol"+i.toString(),date:"2019-01-01"});
+    }
     this.setData({
       array: arr,
-    });
-    console.log(this.data.array);
-    console.log(typeof(size));
-   // this.onLoad();
+    }); 
   },
-  DateChange(e) {
+
+
+DateChange(e) {
+    var date=e.detail.value;
+    if(number>-1)
+    {
+      plans.date=date;
+      var toolArray=new Array();
+      toolArray=this.data.array;
+      toolArray[temp].date=date;
+      upLoadArray[temp].date=date;
+      this.setData(
+        {
+          array:toolArray
+        }
+      );
+      
+    this.upLoad(plans);
+      toolArray=null;
+    }
+    else{
+      wx.showToast({
+        title: 'error',
+        //icon: 'loading',
+        duration: 2000
+      })
+    }
+    /*
+    arr3[0].date=plans.date;
+    console.log(arr2);
     this.setData({
-      data1: e.detail.value
-    })
+      array: arr3
+    })*/
   },
-  SM:function(){
-    setTimeout(function(){
-    wx.showToast({
-      title: '上传成功',
-      icon:'success',
-      duration: 2000
-    })},2000),
-    wx.showToast({
-      title: '正在上传',
-      icon: 'loading',
-      duration: 2000
-  })},
 
 /*表单提交函数*/
+//药物名称改变函数
 Submit: function(e)
 {
-  var abc=e.detail.value;
-  console.log(e);
+  var name=e.detail.value;
+  upLoadArray[temp].name = name;
+  if(name==plans.name&&name==null)
+  {
+    wx.showToast({
+      title: 'error',
+      //icon: 'loading',
+      duration: 2000
+    })
+  }
+  else{
+    plans.name=name;
+  }
+},
+
+upLoad(plans){
+  
+  if(number>-1&&plans.name!=null&&plans.date!=null)
+  {
+    //upLoadArray.push(plans);
+    number--;
+    temp++;
+    console.log(upLoadArray);
+   /*plans.date=null;
+    plans.name=null;*/
+  
+
+  }
+  else{
+    wx.showToast({
+      title: 'error',
+      //icon: 'loading',
+      duration: 2000
+    })
+  }
+
+
+
+  /*
+  plans.name=e.detail.value;
+  //console.log(plans);
   this.setData({
-    test:abc,
+    //test:abc,
     isSubmit:true
   });
-  console.log(this.data.test);
+ /*
   if (this.data.isSubmit){
-    //console.log("Unload方法被调用");
-    console.log("下面是Data中的数据");
     const eventChannel=this.getOpenerEventChannel();//注意这里必须新声明一个新的eventChannel
     eventChannel.emit('acceptDataFromHidePlanPage', { data: this.data.test });
-   }
+   }*/
 },
   /**
    * 生命周期函数--监听页面加载
@@ -78,6 +138,23 @@ Submit: function(e)
     //console.log(eventChannel);  
     eventChannel.emit('acceptDataFromCreatePlanPage', {data: 'get The information'});
   },
+
+  SM: function () {/*
+    setTimeout(function () {
+      wx.showToast({
+        title: '上传成功',
+        icon: 'success',
+        duration: 2000
+      })
+    }, 2000),
+      wx.showToast({
+        title: '正在上传',
+        icon: 'loading',
+        duration: 2000
+      });*/
+      this.upLoad();
+  },
+
 
   /**
    * 生命周期函数--监听页面初次渲染完成

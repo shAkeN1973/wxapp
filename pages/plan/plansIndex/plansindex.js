@@ -17,10 +17,10 @@ Page({
       url: "../createPlans/createPlans",  //跳转到创建服药计划页面进行数据通信
       events: {
         acceptDataFromCreatePlanPage: function(data) {  //添加一个监听器，获取从打开页面传来的数据
-          console.log(data)
+          //console.log(data)
         },
         acceptDataFromHidePlanPage: function (data) {  //添加一个监听器，获取从打开页面传来的数据
-          console.log(data)
+          //console.log(data)
         }
       },
       success: function(res) {
