@@ -48,7 +48,7 @@ DateChange(e) {
       var toolArray=new Array();
       toolArray=this.data.array;
       toolArray[temp].date=date;
-      upLoadArray[temp].date=date;
+      //upLoadArray[temp].date=date;
       this.setData(
         {
           array:toolArray
@@ -78,7 +78,7 @@ DateChange(e) {
 Submit: function(e)
 {
   var name=e.detail.value;
-  upLoadArray[temp].name = name;
+  //upLoadArray[temp].name = name;
   if(name==plans.name&&name==null)
   {
     wx.showToast({
@@ -93,17 +93,17 @@ Submit: function(e)
 },
 
 upLoad(plans){
-  
+  var toolPlans={};
+  toolPlans.name=plans.name;
+  toolPlans.date=plans.date;
   if(number>-1&&plans.name!=null&&plans.date!=null)
   {
-    //upLoadArray.push(plans);
+    upLoadArray.push(toolPlans);
     number--;
     temp++;
     console.log(upLoadArray);
    /*plans.date=null;
     plans.name=null;*/
-  
-
   }
   else{
     wx.showToast({
@@ -152,7 +152,7 @@ upLoad(plans){
         icon: 'loading',
         duration: 2000
       });*/
-      this.upLoad();
+      this.upLoad(plans);
   },
 
 
