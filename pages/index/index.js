@@ -34,7 +34,7 @@ Page({
   //事件处理函数
   bindViewTap: function() {
     wx.navigateTo({
-      url: '../plan/plan'
+      url: '../plan/creatPlans'
     })
   },
 

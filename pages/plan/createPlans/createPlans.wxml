@@ -11,7 +11,7 @@
   <block wx:for="{{array}}" wx:key="symbol" wx:for-item="item"> 
   	<view class="cu-form-group">
 		<view class="title">药物</view>
-		<input placeholder="药名" bindinput="Submit"></input>
+		<input placeholder="药名" bindinput="Submit" id="drugName"></input>
 	</view>
   <view class="cu-form-group">
 		  <view class="title">日期选择</view>
@@ -22,7 +22,7 @@
 	</view>
   <view class="cu-form-group">
 		<view class="title">服药天数</view>
-		<input placeholder="1~7天"></input>
+		<input placeholder="1~7天" bindinput="Submit" id="drugDays"></input>
 	</view>
   	<view class="cu-form-group">
 		<view class="title">饭前吃</view>
@@ -30,11 +30,11 @@
 	</view>
   <view class="cu-form-group">
 		<view class="title">每天顿数</view>
-		<input placeholder="0~5顿"></input>
+		<input placeholder="请输入您每天吃药的顿" bindinput="Submit" id="frenquency"></input>
 	</view>
  <view class="cu-form-group">
 		<view class="title">每顿数量</view>
-		<input placeholder=""></input>
+		<input placeholder="请输入您每顿服药的数量" type="number" bindinput="Submit" id="drugInOneDay"></input>
 	</view>
    </block>
   </view>

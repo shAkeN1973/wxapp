@@ -7,8 +7,10 @@ var plans= {
   date: "",
   lengthOfTime: null,
   frenquency: null,
+  drugInOneDay:null,
   afterOrBefore: null,
   }
+
 Page({
   data: {
     test:"",
@@ -28,7 +30,7 @@ Page({
     });
     var size =parseInt(this.data.index);  //index为字符串，parseInt将其转化为数值
     number=size;                        //设立哨兵
-    temp=0;                            //
+    temp=0;                          
     var arr=new Array();
     for(var i=0;i<size+1;i++)
     {
@@ -55,7 +57,7 @@ DateChange(e) {
         }
       );
       
-    this.upLoad(plans);
+    //this.upLoad(plans);
       toolArray=null;
     }
     else{
@@ -65,56 +67,105 @@ DateChange(e) {
         duration: 2000
       })
     }
-    /*
-    arr3[0].date=plans.date;
-    console.log(arr2);
-    this.setData({
-      array: arr3
-    })*/
   },
 
 /*表单提交函数*/
-//药物名称改变函数
 Submit: function(e)
 {
+  if(e.currentTarget.id=='drugName'){
   var name=e.detail.value;
-  //upLoadArray[temp].name = name;
+  console.log(e);
   if(name==plans.name&&name==null)
   {
     wx.showToast({
       title: 'error',
-      //icon: 'loading',
       duration: 2000
     })
   }
-  else{
+  else
     plans.name=name;
   }
-},
+  else if (e.currentTarget.id =='drugDays')
+  {
+    var lengthOfTime = e.detail.value;
+    console.log(e);
+    if (lengthOfTime == null) {
+      wx.showToast({
+        title: 'error',
+        icon: "none",
+        duration: 2000
+      })
+    }
+    else
+      plans.lengthOfTime = lengthOfTime;
+  }
+  else if (e.currentTarget.id == 'frenquency') {
+    var frenquency = e.detail.value;
+    console.log(e);
+    if (frenquency == null) {
+      wx.showToast({
+        title: 'error',
+        icon: "none",
+        duration: 2000
+      })
+    }
+    else{
+      plans.frenquency = frenquency;
+}
+  }
+  else if (e.currentTarget.id == 'drugInOneDay') {
+    var drugInOneDay = e.detail.value;
+    console.log(e);
+    if (drugInOneDay == null) {
+      wx.showToast({
+        title: 'error',
+        icon: "none",
+        duration: 2000
+      })
+    }
+    else {
+      plans.drugInOneDay = drugInOneDay;
+      this.upLoad(plans);
+    }
+  }
+  
+    
+  },
+
 
 upLoad(plans){
-  var toolPlans={};
-  toolPlans.name=plans.name;
-  toolPlans.date=plans.date;
   if(number>-1&&plans.name!=null&&plans.date!=null)
   {
-    upLoadArray.push(toolPlans);
-    number--;
+    upLoadArray.push(this.refresh(plans));
+    number--; 
     temp++;
     console.log(upLoadArray);
-   /*plans.date=null;
-    plans.name=null;*/
   }
   else{
     wx.showToast({
       title: 'error',
-      //icon: 'loading',
+      icon: 'none',
       duration: 2000
     })
   }
+},
 
 
-
+  refresh(plans){     //plans 按值传递
+    var toolplans= {
+      name: "",
+      date: "",
+      lengthOfTime: null,
+      frenquency: null,
+      afterOrBefore: null,
+      };
+      toolplans.name=plans.name;
+      toolplans.date=plans.date;
+      toolplans.lengthOfTime=plans.lengthOfTime;
+      toolplans.frenquency=plans.frenquency;
+      toolplans.afterOrBefore=plans.afterOrBefore;
+      return toolplans;
+  },
   /*
   plans.name=e.detail.value;
   //console.log(plans);
@@ -127,7 +178,7 @@ upLoad(plans){
     const eventChannel=this.getOpenerEventChannel();//注意这里必须新声明一个新的eventChannel
     eventChannel.emit('acceptDataFromHidePlanPage', { data: this.data.test });
    }*/
-},
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -139,20 +190,7 @@ upLoad(plans){
     eventChannel.emit('acceptDataFromCreatePlanPage', {data: 'get The information'});
   },
 
-  SM: function () {/*
-    setTimeout(function () {
-      wx.showToast({
-        title: '上传成功',
-        icon: 'success',
-        duration: 2000
-      })
-    }, 2000),
-      wx.showToast({
-        title: '正在上传',
-        icon: 'loading',
-        duration: 2000
-      });*/
-      this.upLoad(plans);
+  SM: function () {
   },
 
 
