@@ -3,22 +3,6 @@
 const app = getApp()
 import mqtt from '../../library/mqtt.js';
 
-/*
-const host ='wxs://www.xjtuzhijiysx.cn/mqtt';
-const options = {
-  protocolVersion: 4, //MQTT连接协议版本
-  clientId: randomString(10),
-  clean: true,
-  //username: '1v1r5ep',
-  //password: 'tNVKODyl2chbm5yp',
-  reconnectPeriod: 1000,
-  connectTimeout: 30 * 1000,
-  resubscribe: true
-};
-*/
-
-
-
 Page({
   data: {                    //page页面数据定义
     client: null,  

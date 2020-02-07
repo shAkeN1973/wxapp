@@ -1,4 +1,9 @@
 /*creatPlans.js*/
+
+const app = getApp()
+import mqtt from '../../../library/mqtt.js';
+
+
 var number=null;
 var temp=null;
 var upLoadArray=new Array();
@@ -13,6 +18,7 @@ var plans= {
 
 Page({
   data: {
+    client:null,
     test:"",
     isSubmit:false,
     N:{},
@@ -191,8 +197,24 @@ upLoad(plans){
   },
 
   SM: function () {
+    var newJson = JSON.stringify(upLoadArray); //数组转json字符串
+ 
+    var that = this;
+    that.data.client = app.globalData.client;
+    that.data.client.on('connect', e => {
+      console.log("ok");
+      that.data.client.subscribe('presence', function (err) {
+        if (!err) {
+          that.data.client.publish('presence', newJson)
+        }
+      })
+    });
+    that.data.client.on('message', function (topic, message) {
+      console.log(message.toString());
+      that.data.client.end();
+  })
+  
   },
-
 
   /**
    * 生命周期函数--监听页面初次渲染完成
