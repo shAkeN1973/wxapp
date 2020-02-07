@@ -1,71 +1,190 @@
-Page({
+/*creatPlans.js*/
 
-  /**
-   * 页面的初始数据
-   */
+const app = getApp()
+import mqtt from '../../../library/mqtt.js';
+
+
+var number=null;
+var temp=null;
+var upLoadArray=new Array();
+var plans= {
+  name: "",
+  date: "",
+  lengthOfTime: null,
+  frenquency: null,
+  drugInOneDay:null,
+  afterOrBefore: null,
+  }
+
+Page({
   data: {
+    client:null,
     test:"",
     isSubmit:false,
     N:{},
-    index:null,
-    picker:["1","2","3","4","5","6","7","8"],
+    index:null,                                //默认数组的当前下标名
+    picker:["1","2","3","4","5","6","7","8"],  //选择有多少种药物
     howMany:"0",
-      data1:"2019-07-01",
-      data2: "2019-07-01",
-    array:[
-    {
-    name1:"",
-    eatTime:"",
-    oneDay:""
-    },
-      {
-        name1: "",
-        eatTime: "",
-        oneDay: ""
-      },
-    ]
+    date1:"2019-07-01",
+    date2: "2019-07-01",
+    array:[],
   },
+
   PickerChange(e) {
-    console.log(e);
     this.setData({
       index: e.detail.value,
-    })
-  },
-  DateChange(e) {
+    });
+    var size =parseInt(this.data.index);  //index为字符串，parseInt将其转化为数值
+    number=size;                        //设立哨兵
+    temp=0;                          
+    var arr=new Array();
+    for(var i=0;i<size+1;i++)
+    {
+      arr.push({"symbol":"symbol"+i.toString(),date:"2019-01-01"});
+    }
     this.setData({
-      data1: e.detail.value
-    })
+      array: arr,
+    }); 
   },
-  SM:function(){
-    setTimeout(function(){
-    wx.showToast({
-      title: '上传成功',
-      icon:'success',
-      duration: 2000
-    })},2000),
-    wx.showToast({
-      title: '正在上传',
-      icon: 'loading',
-      duration: 2000
-  })},
+
+
+DateChange(e) {
+    var date=e.detail.value;
+    if(number>-1)
+    {
+      plans.date=date;
+      var toolArray=new Array();
+      toolArray=this.data.array;
+      toolArray[temp].date=date;
+      //upLoadArray[temp].date=date;
+      this.setData(
+        {
+          array:toolArray
+        }
+      );
+      
+    //this.upLoad(plans);
+      toolArray=null;
+    }
+    else{
+      wx.showToast({
+        title: 'error',
+        //icon: 'loading',
+        duration: 2000
+      })
+    }
+  },
 
 /*表单提交函数*/
 Submit: function(e)
 {
-  var abc=e.detail.value;
+  if(e.currentTarget.id=='drugName'){
+  var name=e.detail.value;
   console.log(e);
+  if(name==plans.name&&name==null)
+  {
+    wx.showToast({
+      title: 'error',
+      duration: 2000
+    })
+  }
+  else
+    plans.name=name;
+  }
+  else if (e.currentTarget.id =='drugDays')
+  {
+    var lengthOfTime = e.detail.value;
+    console.log(e);
+    if (lengthOfTime == null) {
+      wx.showToast({
+        title: 'error',
+        icon: "none",
+        duration: 2000
+      })
+    }
+    else
+      plans.lengthOfTime = lengthOfTime;
+  }
+  else if (e.currentTarget.id == 'frenquency') {
+    var frenquency = e.detail.value;
+    console.log(e);
+    if (frenquency == null) {
+      wx.showToast({
+        title: 'error',
+        icon: "none",
+        duration: 2000
+      })
+    }
+    else{
+      plans.frenquency = frenquency;
+}
+  }
+  else if (e.currentTarget.id == 'drugInOneDay') {
+    var drugInOneDay = e.detail.value;
+    console.log(e);
+    if (drugInOneDay == null) {
+      wx.showToast({
+        title: 'error',
+        icon: "none",
+        duration: 2000
+      })
+    }
+    else {
+      plans.drugInOneDay = drugInOneDay;
+      this.upLoad(plans);
+    }
+  }
+  
+    
+  },
+
+
+upLoad(plans){
+  if(number>-1&&plans.name!=null&&plans.date!=null)
+  {
+    upLoadArray.push(this.refresh(plans));
+    number--; 
+    temp++;
+    console.log(upLoadArray);
+  }
+  else{
+    wx.showToast({
+      title: 'error',
+      icon: 'none',
+      duration: 2000
+    })
+  }
+},
+
+
+  refresh(plans){     //plans 按值传递
+    var toolplans= {
+      name: "",
+      date: "",
+      lengthOfTime: null,
+      frenquency: null,
+      afterOrBefore: null,
+      };
+      toolplans.name=plans.name;
+      toolplans.date=plans.date;
+      toolplans.lengthOfTime=plans.lengthOfTime;
+      toolplans.frenquency=plans.frenquency;
+      toolplans.afterOrBefore=plans.afterOrBefore;
+      return toolplans;
+  },
+  /*
+  plans.name=e.detail.value;
+  //console.log(plans);
   this.setData({
-    test:abc,
+    //test:abc,
     isSubmit:true
   });
-  console.log(this.data.test);
+ /*
   if (this.data.isSubmit){
-    //console.log("Unload方法被调用");
-    console.log("下面是Data中的数据");
     const eventChannel=this.getOpenerEventChannel();//注意这里必须新声明一个新的eventChannel
     eventChannel.emit('acceptDataFromHidePlanPage', { data: this.data.test });
-   }
-},
+   }*/
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -75,6 +194,26 @@ Submit: function(e)
     const eventChannel = this.getOpenerEventChannel()
     //console.log(eventChannel);  
     eventChannel.emit('acceptDataFromCreatePlanPage', {data: 'get The information'});
+  },
+
+  SM: function () {
+    var newJson = JSON.stringify(upLoadArray); //数组转json字符串
+ 
+    var that = this;
+    that.data.client = app.globalData.client;
+    that.data.client.on('connect', e => {
+      console.log("ok");
+      that.data.client.subscribe('presence', function (err) {
+        if (!err) {
+          that.data.client.publish('presence', newJson)
+        }
+      })
+    });
+    that.data.client.on('message', function (topic, message) {
+      console.log(message.toString());
+      that.data.client.end();
+  })
+  
   },
 
   /**

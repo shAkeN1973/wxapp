@@ -5,10 +5,11 @@ const host =
 'wxs://www.xjtuzhijiysx.cn/mqtt';
 const options = {
   protocolVersion: 4, //MQTT连接协议版本
-  clientId: randomString(10),
+  //clientId: randomString(10),
+  clientId: "abcdefg",
   clean: true,
-  username: '1v1r5ep/zhihu_iamliubo',
-  password: 'tNVKODyl2chbm5yp',
+  //username: '1v1r5ep/zhihu_iamliubo',
+  //password: 'tNVKODyl2chbm5yp',
   reconnectPeriod: 1000,
   connectTimeout: 30 * 1000,
   resubscribe: true
@@ -86,5 +87,6 @@ function randomString(len) {
   for (let i = 0; i < len; i++) {
     pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
   }
+  console.log(pwd);
   return pwd;
 }

@@ -3,22 +3,6 @@
 const app = getApp()
 import mqtt from '../../library/mqtt.js';
 
-/*
-const host ='wxs://www.xjtuzhijiysx.cn/mqtt';
-const options = {
-  protocolVersion: 4, //MQTT连接协议版本
-  clientId: randomString(10),
-  clean: true,
-  //username: '1v1r5ep',
-  //password: 'tNVKODyl2chbm5yp',
-  reconnectPeriod: 1000,
-  connectTimeout: 30 * 1000,
-  resubscribe: true
-};
-*/
-
-
-
 Page({
   data: {                    //page页面数据定义
     client: null,  
@@ -28,13 +12,13 @@ Page({
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     time:(new Date()).toString()
   },
-   
+
   
  
   //事件处理函数
   bindViewTap: function() {
     wx.navigateTo({
-      url: '../plan/plan'
+      url: '../plan/creatPlans'
     })
   },
 
@@ -86,6 +70,7 @@ Page({
     testValue="test";
     console.log(this.testValue);
     console.log(testValue);
+    
    /* 
     const client = mqtt.connect(host, options);
     console.log(options.clientId);
@@ -100,6 +85,7 @@ Page({
 
     var that = this;
     that.data.client=app.globalData.client;
+  
     that.data.client.on('connect',e=>{
       console.log("ok");
       that.data.client.subscribe('presence',function(err){

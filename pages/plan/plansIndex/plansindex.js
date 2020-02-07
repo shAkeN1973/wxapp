@@ -3,7 +3,7 @@ Page({
   data: {
     logs: [],
   },
-  onLoad: function () {
+  onLoad: function () {//从远端获得
     /*this.setData({
       logs: (wx.getStorageSync('logs') || []).map(log => {
         return util.formatTime(new Date(log))
@@ -17,10 +17,10 @@ Page({
       url: "../createPlans/createPlans",  //跳转到创建服药计划页面进行数据通信
       events: {
         acceptDataFromCreatePlanPage: function(data) {  //添加一个监听器，获取从打开页面传来的数据
-          console.log(data)
+          //console.log(data)
         },
         acceptDataFromHidePlanPage: function (data) {  //添加一个监听器，获取从打开页面传来的数据
-          console.log(data)
+          //console.log(data)
         }
       },
       success: function(res) {
