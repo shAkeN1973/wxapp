@@ -6,15 +6,31 @@ import mqtt from '../../../library/mqtt.js';
 
 var number=null;
 var temp=null;
+var numberTime=null;
+var tempTime=null;
 var upLoadArray=new Array();
+
+
 var plans= {
-  name: "",
-  date: "",
-  lengthOfTime: null,
-  frenquency: null,
-  drugInOneDay:null,
-  afterOrBefore: null,
-  }
+  name: "",   //药物名称
+  date: "",  //开始服药日期
+  timer:[],  //设定的时间数组
+  lengthOfTime: null,    //服药时间长度
+  frenquency: null,      //一天吃几次
+  drugsInOneDay:null,     //一次吃多少
+  afterOrBefore: null,   //饭前饭后吃
+  interval:null,      //服药间隔天数（若每天都吃则为null)
+  };
+
+
+var upLoadPlans={   //上传数组
+  name:"",          //药物名称，可用于校验
+  number:null,      //对应的药盒编号
+  timer:[],        //每天的服药时间段
+  drugsInOneDay:null,   //每天吃多少
+  dateArray:[],        //日期数组，可能不会要但是得写上
+  afterOrBefore:null   //饭前吃还是饭后吃
+};
 
 Page({
   data: {
@@ -22,51 +38,50 @@ Page({
     test:"",
     isSubmit:false,
     N:{},
-    index:null,                                //默认数组的当前下标名
+    index:null,
+    indexTime:null,                                //默认数组的当前下标名
     picker:["1","2","3","4","5","6","7","8"],  //选择有多少种药物
     howMany:"0",
     date1:"2019-07-01",
-    date2: "2019-07-01",
     array:[],
+    timeChanger:[]
   },
 
   PickerChange(e) {
+    //console.log(e);
     this.setData({
-      index: e.detail.value,
+      indexTime: e.detail.value,                    //一天以内吃几次的数量（frequency)
     });
-    var size =parseInt(this.data.index);  //index为字符串，parseInt将其转化为数值
-    number=size;                        //设立哨兵
-    temp=0;                          
+    var size =parseInt(this.data.indexTime); 
+    numberTime=size;                          
+    tempTime=0;                                            
     var arr=new Array();
-    for(var i=0;i<size+1;i++)
+    for(var i=0;i<size;i++)
     {
-      arr.push({"symbol":"symbol"+i.toString(),date:"2019-01-01"});
+      arr.push({"symbolTime":"symbolTime"+i.toString(),time:"12:00"});
     }
     this.setData({
       array: arr,
     }); 
+    arr=null;
   },
 
-
-DateChange(e) {
-    var date=e.detail.value;
-    if(number>-1)
-    {
-      plans.date=date;
-      var toolArray=new Array();
-      toolArray=this.data.array;
-      toolArray[temp].date=date;
-      //upLoadArray[temp].date=date;
+  TimeChange(e){
+    var time= e.detail.value;
+    if (number > -1) {
+      plans.timer.push(time);
+      var toolArray = this.data.array;
+      //console.log(plans);
+      toolArray[tempTime].time = time;
       this.setData(
         {
-          array:toolArray
+          array: toolArray
         }
       );
-      
-    //this.upLoad(plans);
-      toolArray=null;
+      toolArray = null;
+      tempTime++;
     }
-    else{
+    else {
       wx.showToast({
         title: 'error',
         //icon: 'loading',
@@ -75,12 +90,21 @@ DateChange(e) {
     }
   },
 
+DateChange(e) {     //将显示的日期改变
+    var date=e.detail.value;
+    plans.date=date;
+      this.setData(
+        {
+          date1:date
+        })
+  },
+
 /*表单提交函数*/
 Submit: function(e)
 {
   if(e.currentTarget.id=='drugName'){
   var name=e.detail.value;
-  console.log(e);
+  //console.log(e);
   if(name==plans.name&&name==null)
   {
     wx.showToast({
@@ -91,10 +115,10 @@ Submit: function(e)
   else
     plans.name=name;
   }
-  else if (e.currentTarget.id =='drugDays')
+  else if (e.currentTarget.id =='lengthOfTime')
   {
     var lengthOfTime = e.detail.value;
-    console.log(e);
+   // console.log(e);
     if (lengthOfTime == null) {
       wx.showToast({
         title: 'error',
@@ -105,23 +129,9 @@ Submit: function(e)
     else
       plans.lengthOfTime = lengthOfTime;
   }
-  else if (e.currentTarget.id == 'frenquency') {
-    var frenquency = e.detail.value;
-    console.log(e);
-    if (frenquency == null) {
-      wx.showToast({
-        title: 'error',
-        icon: "none",
-        duration: 2000
-      })
-    }
-    else{
-      plans.frenquency = frenquency;
-}
-  }
   else if (e.currentTarget.id == 'drugInOneDay') {
     var drugInOneDay = e.detail.value;
-    console.log(e);
+   // console.log(e);
     if (drugInOneDay == null) {
       wx.showToast({
         title: 'error',
@@ -130,34 +140,87 @@ Submit: function(e)
       })
     }
     else {
-      plans.drugInOneDay = drugInOneDay;
-      this.upLoad(plans);
+      plans.drugsInOneDay = drugInOneDay;
     }
   }
-  
-    
+  else if (e.currentTarget.id == 'interval') {
+    var interval = e.detail.value;
+   // console.log(e);
+    if (interval == null) {
+      wx.showToast({
+        title: 'error',
+        icon: "none",
+        duration: 2000
+      })
+    }
+    else {
+      plans.interval = interval;
+      console.log(plans);
+    }
+  }
   },
 
 
-upLoad(plans){
-  if(number>-1&&plans.name!=null&&plans.date!=null)
-  {
-    upLoadArray.push(this.refresh(plans));
-    number--; 
-    temp++;
-    console.log(upLoadArray);
+
+dateCaculator(plans,upLoadPlans)   //计算日期数组
+{
+  var year=parseInt(plans.date.substring(0,4));
+  var month=parseInt(plans.date.substring(5,7));
+  var day=parseInt(plans.date.substring(8,10));
+  var dateMax=null;
+  if(month==2)
+{
+    if(year%4==0&&year%100!=0)
+        dateMax=29;
+    else
+        dateMax=20;
+}
+else if(month>6&&month%2==0||month<7&&month%2!==0)
+{
+    dateMax=31;
+}
+else{
+    dateMax=30;
+}
+console.log(plans.interval);
+for(var i=0;i<plans.lengthOfTime;i++)
+{
+    var string=new String();
+    string=year.toString()+"-"+month.toString()+"-"+day.toString();
+    upLoadPlans.dateArray.push(string);
+   day = day + 1;
+  if (day >= dateMax) {
+    day = day % dateMax;
+    month++;
   }
-  else{
-    wx.showToast({
-      title: 'error',
-      icon: 'none',
-      duration: 2000
-    })
-  }
+    console.log(string);
+    string=null;
+}
 },
 
 
-  refresh(plans){     //plans 按值传递
+upLoad(upLoadPlans){
+  var newJson = JSON.stringify(upLoadPlans); //数组转json字符串
+    var that = this;
+    that.data.client = app.globalData.client;
+    that.data.client.on('connect', e => {
+      console.log("ok");
+      that.data.client.subscribe('presence', function (err) {
+        if (!err) {
+          that.data.client.publish('presence', newJson)
+        }
+      })
+    });
+    that.data.client.on('message', function (topic, message) {
+      console.log(message.toString());
+      that.data.client.end();
+  })
+ 
+},
+
+
+
+refresh(plans){     //plans 按值传递
     var toolplans= {
       name: "",
       date: "",
@@ -197,23 +260,13 @@ upLoad(plans){
   },
 
   SM: function () {
-    var newJson = JSON.stringify(upLoadArray); //数组转json字符串
- 
-    var that = this;
-    that.data.client = app.globalData.client;
-    that.data.client.on('connect', e => {
-      console.log("ok");
-      that.data.client.subscribe('presence', function (err) {
-        if (!err) {
-          that.data.client.publish('presence', newJson)
-        }
-      })
-    });
-    that.data.client.on('message', function (topic, message) {
-      console.log(message.toString());
-      that.data.client.end();
-  })
-  
+    upLoadPlans.name=plans.name;
+    upLoadPlans.drugsInOneDay=plans.drugsInOneDay;
+    upLoadPlans.afterOrBefore=plans.afterOrBefore;
+    upLoadPlans.timer=plans.timer;
+    this.dateCaculator(plans,upLoadPlans);
+    console.log(upLoadPlans);
+    this.upLoad(upLoadPlans);
   },
 
   /**

@@ -1,43 +1,60 @@
 <!--creatPlans.xml-->
+<!--
 <view class="cu-form-group margin-top">
 		<view class="title">请选择本次服药计划共几类药物</view>
-		<picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+		<picker bindchange="PickerChange" value="{{index}}" range="{{picker}}" id="allChanger">
 			<view class="picker">
 				{{index?picker[index]:'上限为8种'}}
 			</view>
 		</picker>
-	</view>
-<view wx:if="{{index != null}}">
-  <block wx:for="{{array}}" wx:key="symbol" wx:for-item="item"> 
-  	<view class="cu-form-group">
+</view>
+<view wx:if="{{index!= null}}">
+  <block wx:for="{{allChanger}}" wx:key="symbolDate" wx:for-item="item"> -->
+	<view class="cu-form-group">
 		<view class="title">药物</view>
 		<input placeholder="药名" bindinput="Submit" id="drugName"></input>
 	</view>
-  <view class="cu-form-group">
-		  <view class="title">日期选择</view>
-		  <picker mode="date" value="{{date1}}" start="2015-09-01" end="2020-09-01" bindchange="DateChange">
-        <view class="picker">
-				{{item.date}}</view>
-        </picker>
+	<view class="cu-form-group">
+		<view class="title">每天顿数</view>
+		<input placeholder="请输入您每天吃药的顿数" bindinput="PickerChange" id="frequency"></input>
+    </view>
+	<view wx:if="{{indexTime!=null}}">
+	<block wx:for="{{array}}"wx:key="symbolTime" wx:for-item="item">
+		<view class="cu-form-group">
+		  <view class="title">设定时间</view>
+		  <picker mode="time" value="{{item.time}}" start="00:00" end="23:59" bindchange="TimeChange">
+        	<view class="picker">
+				{{item.time}}
+			  </view>
+          </picker>
+        </view>
+	</block>
 	</view>
-  <view class="cu-form-group">
+    <view class="cu-form-group">
+		  <view class="title">日期选择
+		  </view>
+		  <picker mode="date" value="{{date1}}" start="2015-09-01" end="2020-09-01" bindchange="DateChange">
+        	<view class="picker">
+				{{date1}}
+			</view>
+          </picker>
+    </view>
+    <view class="cu-form-group">
 		<view class="title">服药天数</view>
-		<input placeholder="1~7天" bindinput="Submit" id="drugDays"></input>
+		<input placeholder="1~7天" bindinput="Submit" id="lengthOfTime"></input>
+	</view>
+	<view class="cu-form-group">
+		<view class="title">服药天数的间隔</view>
+		<input placeholder="1~7天" bindinput="Submit" id="interval"></input>
 	</view>
   	<view class="cu-form-group">
 		<view class="title">饭前吃</view>
 		<switch></switch>
 	</view>
-  <view class="cu-form-group">
-		<view class="title">每天顿数</view>
-		<input placeholder="请输入您每天吃药的顿" bindinput="Submit" id="frenquency"></input>
-	</view>
- <view class="cu-form-group">
+    <view class="cu-form-group">
 		<view class="title">每顿数量</view>
 		<input placeholder="请输入您每顿服药的数量" type="number" bindinput="Submit" id="drugInOneDay"></input>
 	</view>
-   </block>
-  </view>
 
   <view class="padding flex flex-direction">
   <button class="cu-btn bg-red margin-tb-sm lg" bindtap="SM">提交</button>
