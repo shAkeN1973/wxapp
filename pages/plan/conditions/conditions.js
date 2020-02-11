@@ -1,11 +1,40 @@
+const app = getApp()
+import mqtt from '../../../library/mqtt.js';
+
+
+
+
+
+
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    client:null,
     
   },
+
+
+  mqttCon:function(){
+    var that = this;
+    that.data.client = app.globalData.client;
+    that.data.client.on('connect', e => {
+      console.log("ok");
+      that.data.client.subscribe('presence', function (err) {
+        if (!err) {
+          that.data.client.on('message', function (topic, message) {
+            console.log(message.toString());
+            that.data.client.end();
+          })
+        }
+      })
+    });
+  },
+
+
 
   /**
    * 生命周期函数--监听页面加载

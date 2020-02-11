@@ -1,4 +1,4 @@
-//进行服药计划的显示工作
+  //进行服药计划的显示工作
 Page({
   data: {
     logs: [],
@@ -35,6 +35,12 @@ Page({
     //wx.startPullDownRefresh();
     //可以在这里执行代码逻辑
     setTimeout(function(){wx.stopPullDownRefresh()},1000);
+  },
 
+  navigateToCondition:function()
+  {
+    wx.navigateTo({
+      url: "../conditions/conditions",
+    })
   }
 })
