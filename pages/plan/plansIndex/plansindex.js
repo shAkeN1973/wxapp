@@ -3,7 +3,12 @@ Page({
   data: {
     logs: [],
   },
-  onLoad: function () {//从远端获得
+  onLoad: function () {
+    var numberArray=wx.getStorageSync('nmsl');//获得缓存中储存的数组元素
+    console.log(numberArray);
+
+
+    //从远端获得
     /*this.setData({
       logs: (wx.getStorageSync('logs') || []).map(log => {
         return util.formatTime(new Date(log))
@@ -11,6 +16,13 @@ Page({
     })
   }*/
   },
+
+
+
+
+
+
+
   createNewPlan:function(){
     console.log("progress maked here");
       wx.navigateTo({
@@ -39,6 +51,12 @@ Page({
 
   navigateToCondition:function()
   {
+    wx.getStorage({
+      key: 'key',
+      success (res) {
+        console.log(res.data)
+      }
+    });
     wx.navigateTo({
       url: "../conditions/conditions",
     })

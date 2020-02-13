@@ -3,7 +3,6 @@
 const app = getApp()
 import mqtt from '../../../library/mqtt.js';
 
-
 var number=null;
 var temp=null;
 var numberTime=null;
@@ -44,7 +43,8 @@ Page({
     howMany:"0",
     date1:"2019-07-01",
     array:[],
-    timeChanger:[]
+    timeChanger:[],
+    numberArray:[]
   },
 
   PickerChange(e) {
@@ -257,6 +257,30 @@ refresh(plans){     //plans 按值传递
     const eventChannel = this.getOpenerEventChannel()
     //console.log(eventChannel);  
     eventChannel.emit('acceptDataFromCreatePlanPage', {data: 'get The information'});
+    var that=this
+    wx.getStorage({
+      key: 'nmsl',
+      success(res) {
+        console.log(res.data)
+        for (let i = 0; i < 12; i++) {
+          if (res.data[i] == null) {
+            upLoadPlans.number = i + 1;           //设置药盒编号
+            res.data[i] ="Occupied"
+            console.log(upLoadPlans,upLoadPlans.number);
+            try{
+            wx.setStorage({
+              key: "nmsl",
+              data: res.data,
+            });}
+            catch(e)
+            {
+              console.log(e);
+            }
+            break;
+          }
+        }
+      }
+    })
   },
 
   SM: function () {
@@ -266,6 +290,10 @@ refresh(plans){     //plans 按值传递
     upLoadPlans.timer=plans.timer;
     this.dateCaculator(plans,upLoadPlans);
     console.log(upLoadPlans);
+    wx.setStorage({
+        key: upLoadPlans.number.toString(),
+        data: upLoadPlans,
+      });
     this.upLoad(upLoadPlans);
   },
 

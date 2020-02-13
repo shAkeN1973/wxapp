@@ -8,6 +8,7 @@
     </block>
   </view>
   <view><button bindtap="testName">123</button></view>
+  <view><button bindtap="initialization">首次登录初始化</button></view>
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
   </view>

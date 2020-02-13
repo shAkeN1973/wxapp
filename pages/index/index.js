@@ -70,12 +70,6 @@ Page({
     testValue="test";
     console.log(this.testValue);
     console.log(testValue);
-    
-   /* 
-    const client = mqtt.connect(host, options);
-    console.log(options.clientId);
-    */
-    
     this.setData(
       {time:20});
   wx.navigateTo({
@@ -102,6 +96,23 @@ Page({
     })
   
   },
+  
+
+initialization:function(){           //缓存数组编号
+    var numberArray=new Array();
+    for(let i=0;i<12;i++)
+    {
+      numberArray.push(null);
+    }
+    wx.setStorage({
+      key:"nmsl",
+      data:numberArray,
+      success:function(){
+        console.log("success");
+      }
+    })
+  }
+
  
 })
 
