@@ -8,6 +8,7 @@ var temp=null;
 var numberTime=null;
 var tempTime=null;
 var upLoadArray=new Array();
+var full=true;
 
 
 var plans= {
@@ -112,8 +113,11 @@ Submit: function(e)
       duration: 2000
     })
   }
-  else
+  else{
+    this.getStorageSlef();
     plans.name=name;
+    }
+  
   }
   else if (e.currentTarget.id =='lengthOfTime')
   {
@@ -160,6 +164,31 @@ Submit: function(e)
   }
   },
 
+getStorageSlef:function(){         //只有在输入药物名称的时候才可以进行下一步操作
+  var that = this
+  wx.getStorage({
+    key: 'nmsl',
+    success(res) {
+      console.log(res.data)
+      for (let i = 0; i < 12; i++) {
+        if (res.data[i] == null) {
+          upLoadPlans.number = i + 1;           //设置药盒编号
+          res.data[i] = "Occupied"
+          try {
+            wx.setStorage({
+              key: "nmsl",
+              data: res.data,
+            });
+          }
+          catch (e) {
+            console.log(e);
+          }
+          break;
+        }
+      }
+    }
+  })
+},
 
 
 dateCaculator(plans,upLoadPlans)   //计算日期数组
@@ -257,6 +286,7 @@ refresh(plans){     //plans 按值传递
     const eventChannel = this.getOpenerEventChannel()
     //console.log(eventChannel);  
     eventChannel.emit('acceptDataFromCreatePlanPage', {data: 'get The information'});
+    /*
     var that=this
     wx.getStorage({
       key: 'nmsl',
@@ -266,7 +296,6 @@ refresh(plans){     //plans 按值传递
           if (res.data[i] == null) {
             upLoadPlans.number = i + 1;           //设置药盒编号
             res.data[i] ="Occupied"
-            console.log(upLoadPlans,upLoadPlans.number);
             try{
             wx.setStorage({
               key: "nmsl",
@@ -280,7 +309,7 @@ refresh(plans){     //plans 按值传递
           }
         }
       }
-    })
+    })*/
   },
 
   SM: function () {
