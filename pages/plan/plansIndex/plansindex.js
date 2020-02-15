@@ -1,11 +1,11 @@
   //进行服药计划的显示工作
 var util = require('../../../utils/util.js');
 var toolNumberArray=null;
-var toolArray = new Array();                           //将渲染数组进行动态显示
 Page({
   data: {
     logs: [],
-    renderingArray:[]
+    renderingArray:[],
+    number:1
   },
   onLoad: function () {
 
@@ -15,24 +15,22 @@ Page({
     var today=util.formatTime(new Date());  //获得今天的日期
     console.log(today,typeof(today));
     var that=this;
+    var toolArray = new Array();                           //将渲染数组进行动态显示
     for(let i=0;i<12;i++)
     {
       if (numberArray[i] =="Occupied")
       {
         var toolPlan=wx.getStorageSync((i+1).toString());
-        console.log(toolPlan);
         var anotherPlan={name:"",endDate:"",number:null}     //渲染数组的对象
         anotherPlan.name=toolPlan.name;
         anotherPlan.endDate=toolPlan.dateArray[toolPlan.dateArray.length-1];
         anotherPlan.number=i+1;
-       
         toolArray.push(anotherPlan);
-        console.log(toolArray);
         that.setData({
           renderingArray: toolArray             
         });
       }
-      console.log()
+  
     }
     
 

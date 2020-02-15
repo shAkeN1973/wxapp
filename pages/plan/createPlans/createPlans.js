@@ -114,7 +114,6 @@ Submit: function(e)
     })
   }
   else{
-    this.getStorageSlef();
     plans.name=name;
     }
   
@@ -211,19 +210,18 @@ else if(month>6&&month%2==0||month<7&&month%2!==0)
 else{
     dateMax=30;
 }
-console.log(plans.interval);
 for(var i=0;i<plans.lengthOfTime;i++)
 {
     var string=new String();
     string=year.toString()+"-"+month.toString()+"-"+day.toString();
     upLoadPlans.dateArray.push(string);
-   day = day + 1;
-  if (day >= dateMax) {
+  day = day + parseInt(plans.interval);
+   if (day >= dateMax) {
     day = day % dateMax;
     month++;
+     console.log(day);
   }
     console.log(string);
-    string=null;
 }
 },
 
@@ -282,6 +280,7 @@ refresh(plans){     //plans 按值传递
    */
   onLoad: function (options) {
     //var N=this.getOpenerEventChannel()
+    this.getStorageSlef();
     
     const eventChannel = this.getOpenerEventChannel()
     //console.log(eventChannel);  

@@ -11,7 +11,7 @@
     <text class="cuIcon-add lg text-black"></text>
   </button>
    <view class='action'>
-    <button class='cu-btn bg-green' bandtap="refresh">
+    <button class='cu-btn bg-green' bindtap="refresh">
       刷新
     </button>
   </view>
@@ -19,7 +19,7 @@
 <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg radius" >
   <block wx:for="{{renderingArray}}"  wx:for-item="item" wx:key="a">
     <view class="cu-item arrow">
-      <navigator class="content" url="../conditions/conditions" hover-class="none">
+      <navigator class="content" url="../conditions/conditions?number={{item.number}}" hover-class="none">
         <image src="/images/pills.png" class="png" mode="aspectFit"></image>
         <text class="text-grey" space="nbsp">药仓：{{item.number}}                        药物名称：{{item.name}}</text>
       </navigator>
