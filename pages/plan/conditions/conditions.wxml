@@ -11,9 +11,9 @@
 </view>
 
 <scroll-view scroll-x class="bg-white padding response cu-steps steps-bottom " scroll-into-view="scroll-{{scroll}}" scroll-with-animation>
-  <view class="cu-item {{index>=scroll?'':'text-blue'}} padding-lr-xl" wx:for="{{dateArray}}" wx:key="a" id="scroll-{{index}}">
+  <view class="cu-item {{index>=scroll?'':'text-blue'}} padding-lr-xl" wx:for="{{dateArray}}" wx:key="a" id="{{index}}">
     {{dateArray[index]}} <text class="num" data-index="{{index + 1}}"></text>
-    <button class="cu-btn2 icon {{index>=scroll?'bg-grey':'bg-blue'}} shadow"></button>
+    <button class="cu-btn2 icon {{index>=scroll?'bg-grey':'bg-blue'}} shadow" bindtap="detail" id="{{index}}"></button>
   </view>
 </scroll-view>
 
@@ -44,7 +44,7 @@
 </view>
 <view class="padding bg-white">
   <view class="cu-progress round sm striped active">
-    <view class="bg-orange" style="width:{{'60%'}};">60%</view>
+    <view class="bg-{{persent2>60?'orange':'green'}}" style="width:{{persent}};">{{persent2}}%</view>
   </view>
 </view>
   

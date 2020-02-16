@@ -1,6 +1,7 @@
 //index.js
 //获取应用实例
 const app = getApp()
+import mqtt from '../../library/mqtt.js';
 
 Page({
   data: {
@@ -8,7 +9,8 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    time: (new Date()).toString()
+    time: (new Date()).toString(),
+    client:null
   },
   //事件处理函数
   bindViewTap: function () {
@@ -61,5 +63,24 @@ Page({
     wx.navigateTo({
       url: '../getUserInfo/getUserInfo',
     })
+  },
+
+  mqttTry:function(){
+    var that = this;
+    that.data.client = app.globalData.client;
+    that.data.client.on('connect', e => {
+      console.log("ok");
+      that.data.client.subscribe('ask', function (err) {
+        if (!err) {
+            console.log("here")
+            that.data.client.on('message', function (topic, message) {
+            console.log(message.toString());
+            that.data.client.end();
+          })
+        }
+      },)
+    });
+    
+
   }
 })

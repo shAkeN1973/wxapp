@@ -8,7 +8,6 @@ Page({
     number:1
   },
   onLoad: function () {
-
     var numberArray=wx.getStorageSync('nmsl');//获得缓存中储存的数组元素
     toolNumberArray=numberArray;
     console.log(numberArray);

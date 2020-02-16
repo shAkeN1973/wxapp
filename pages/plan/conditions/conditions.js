@@ -15,6 +15,32 @@ Page({
     name:null,
     condition:"无异常",
     todayDate:null,
+    persent:"0",
+    persent2:0,
+  },
+
+  detail:function(e){
+    console.log(e);
+    this.mqttConnet();
+  },
+
+
+  mqttConnet:function(){
+    var that = this;
+    that.data.client = app.globalData.client;
+    that.data.client.on('connect', e => {
+      console.log("ok");
+      that.data.client.subscribe('ask', function (err) {
+        if (!err) {
+          console.log("here")
+          that.data.client.publish('ask', that.data.number.toString())
+          console.log("publish done")
+        }
+      })
+      console.log("out1");
+    });
+    console.log("out2");
+
   },
 
 
@@ -22,13 +48,16 @@ Page({
     var that=this;
     for (let i = 0; i < this.data.dateArray.length;i++)
     {
-      this.setData({
-        scroll: this.data.scroll + 1
-      })
       var toolDate = this.date2(this.data.dateArray[i]);
-      if (toolDate.year <=parseInt(this.data.todayDate.year) && toolDate.month <=parseInt(this.data.todayDate.month) && toolDate.day >= parseInt(this.data.todayDate.day)){
+      if (toolDate.year >=parseInt(this.data.todayDate.year) && toolDate.month >=parseInt(this.data.todayDate.month) && toolDate.day >= parseInt(this.data.todayDate.day)){
       break;}
-     
+      var str = parseInt(((i+1 )/ this.data.dateArray.length)*100);
+      var str2=str.toString()+"%"
+      this.setData({
+        scroll: this.data.scroll + 1,
+        persent2:str,
+        persent:str2,
+      })
     }
     // this.setData({
     //   scroll: this.data.scroll == 9 ? 0 : this.data.scroll + 1
