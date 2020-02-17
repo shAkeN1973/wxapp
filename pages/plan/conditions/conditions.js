@@ -17,15 +17,44 @@ Page({
     todayDate:null,
     persent:"0",
     persent2:0,
+    timer:[],
+    toolArray:[],
+    show:false
   },
 
   detail:function(e){
     console.log(e);
-    this.mqttConnet();
+    var obj=this.data.toolArray;
+    // console.log(obj)
+    for(let i=0;i<obj.length;i++){
+      if (obj[i].date == e.currentTarget.id)
+      {
+        this.setData({
+          timer:obj[i].timer
+        })
+        break;
+      }
+    }
+    if(this.data.timer.length==0){
+      console.log("error");
+    }
+    else{
+      console.log("success",this.data.timer)
+    }
+    this.setData({
+      show:true
+    })
   },
 
 
-  mqttConnet:function(){
+  hideModal:function(){
+    this.setData({
+      show: false
+    })
+  },
+
+
+  mqttConnet:function(e){
     var that = this;
     that.data.client = app.globalData.client;
     that.data.client.on('connect', e => {
@@ -34,13 +63,23 @@ Page({
         if (!err) {
           console.log("here")
           that.data.client.publish('ask', that.data.number.toString())
-          console.log("publish done")
         }
       })
-      console.log("out1");
     });
-    console.log("out2");
-
+    that.data.client.subscribe('ask'+that.data.number.toString(),function(err){
+      if(!err){
+        that.data.client.on('message',function(topic,message){
+          var obj=JSON.parse(message);
+          if(obj instanceof Array){
+            //write somthing
+            that.setData({
+              toolArray:obj
+            })
+            // console.log(obj,that.data.toolArray);
+          }
+        })
+      }
+    })
   },
 
 
@@ -83,6 +122,7 @@ Page({
      }
    );
     this.scrollSteps();
+    this.mqttConnet();
   },
 
 
