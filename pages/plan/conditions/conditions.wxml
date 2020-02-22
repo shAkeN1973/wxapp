@@ -1,4 +1,70 @@
-  <view class="cu-tabbar-height"></view>
-   <view class="padding flex flex-direction">
-  <button class="cu-btn bg-red margin-tb-sm lg" bindtap="mqttCon">与mqtt进行链接</button>
+  <view class="cu-bar bg-white solid-bottom margin-top">
+  <view class="action">
+    <text class="cuIcon-title text-blue"></text> 日期
+  </view>
+
+  <view class="action">
+    <button class="cu-btn icon bg-white" bindtap="">
+    <text class="cuIcon-settings text-red"></text>
+    </button>
+  </view>
 </view>
+
+<scroll-view scroll-x class="bg-white padding response cu-steps steps-bottom " scroll-into-view="scroll-{{scroll}}" scroll-with-animation>
+  <view class="cu-item {{index>=scroll?'':'text-blue'}} padding-lr-xl" wx:for="{{dateArray}}" wx:key="a" id="{{index}}">
+    {{dateArray[index]}} <text class="num" data-index="{{index + 1}}"></text>
+    <button class="cu-btn2 icon {{index>=scroll?'bg-grey':'bg-blue'}} shadow" bindtap="detail" id="{{dateArray[index]}}"></button>
+  </view>
+</scroll-view>
+
+<!--模态窗口-->
+<view class="cu-modal {{show?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">服药时间</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl" wx:for="{{timer}}" wx:for-item="item" wx:key="a">
+     {{timer[index]}}
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+        <button class="cu-btn line-green text-green" bindtap="hideModal">确定</button>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="cu-list menu ">
+    <view class="cu-item">
+      <view class="content">
+        <text class="cuIcon-emoji text-red"></text>
+        <text class="text-black">药物名称：{{name}}</text>
+      </view>
+    </view>
+    <view class="cu-item">
+      <view class="content">
+        <text class="cuIcon-rank text-orange"></text>
+        <text class="text-black">药仓编号：{{number}}</text>
+      </view>
+    </view>
+    <view class="cu-item">
+      <view class="content">
+        <text class="cuIcon-magic text-purple"></text>
+        <text class="text-black">运行状态：{{condition}}</text>
+      </view>
+    </view>
+</view>
+<view class="cu-bar bg-white solid-bottom margin-top">
+  <view class="action">
+    <text class="cuIcon-title text-red"></text>进度百分比
+  </view>
+</view>
+<view class="padding bg-white">
+  <view class="cu-progress round sm striped active">
+    <view class="bg-{{persent2>60?'orange':'green'}}" style="width:{{persent}};">{{persent2}}%</view>
+  </view>
+</view>
+  

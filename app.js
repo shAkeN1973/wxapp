@@ -87,6 +87,5 @@ function randomString(len) {
   for (let i = 0; i < len; i++) {
     pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
   }
-  console.log(pwd);
   return pwd;
 }

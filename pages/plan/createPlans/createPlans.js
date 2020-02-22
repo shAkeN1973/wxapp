@@ -3,12 +3,12 @@
 const app = getApp()
 import mqtt from '../../../library/mqtt.js';
 
-
 var number=null;
 var temp=null;
 var numberTime=null;
 var tempTime=null;
 var upLoadArray=new Array();
+var full=true;
 
 
 var plans= {
@@ -44,7 +44,8 @@ Page({
     howMany:"0",
     date1:"2019-07-01",
     array:[],
-    timeChanger:[]
+    timeChanger:[],
+    numberArray:[]
   },
 
   PickerChange(e) {
@@ -112,8 +113,10 @@ Submit: function(e)
       duration: 2000
     })
   }
-  else
+  else{
     plans.name=name;
+    }
+  
   }
   else if (e.currentTarget.id =='lengthOfTime')
   {
@@ -160,6 +163,31 @@ Submit: function(e)
   }
   },
 
+getStorageSlef:function(){         //只有在输入药物名称的时候才可以进行下一步操作
+  var that = this
+  wx.getStorage({
+    key: 'nmsl',
+    success(res) {
+      console.log(res.data)
+      for (let i = 0; i < 12; i++) {
+        if (res.data[i] == null) {
+          upLoadPlans.number = i + 1;           //设置药盒编号
+          res.data[i] = "Occupied"
+          try {
+            wx.setStorage({
+              key: "nmsl",
+              data: res.data,
+            });
+          }
+          catch (e) {
+            console.log(e);
+          }
+          break;
+        }
+      }
+    }
+  })
+},
 
 
 dateCaculator(plans,upLoadPlans)   //计算日期数组
@@ -182,19 +210,18 @@ else if(month>6&&month%2==0||month<7&&month%2!==0)
 else{
     dateMax=30;
 }
-console.log(plans.interval);
 for(var i=0;i<plans.lengthOfTime;i++)
 {
     var string=new String();
     string=year.toString()+"-"+month.toString()+"-"+day.toString();
     upLoadPlans.dateArray.push(string);
-   day = day + 1;
-  if (day >= dateMax) {
+  day = day + parseInt(plans.interval);
+   if (day >= dateMax) {
     day = day % dateMax;
     month++;
+     console.log(day);
   }
     console.log(string);
-    string=null;
 }
 },
 
@@ -253,10 +280,35 @@ refresh(plans){     //plans 按值传递
    */
   onLoad: function (options) {
     //var N=this.getOpenerEventChannel()
+    this.getStorageSlef();
     
     const eventChannel = this.getOpenerEventChannel()
     //console.log(eventChannel);  
     eventChannel.emit('acceptDataFromCreatePlanPage', {data: 'get The information'});
+    /*
+    var that=this
+    wx.getStorage({
+      key: 'nmsl',
+      success(res) {
+        console.log(res.data)
+        for (let i = 0; i < 12; i++) {
+          if (res.data[i] == null) {
+            upLoadPlans.number = i + 1;           //设置药盒编号
+            res.data[i] ="Occupied"
+            try{
+            wx.setStorage({
+              key: "nmsl",
+              data: res.data,
+            });}
+            catch(e)
+            {
+              console.log(e);
+            }
+            break;
+          }
+        }
+      }
+    })*/
   },
 
   SM: function () {
@@ -266,6 +318,10 @@ refresh(plans){     //plans 按值传递
     upLoadPlans.timer=plans.timer;
     this.dateCaculator(plans,upLoadPlans);
     console.log(upLoadPlans);
+    wx.setStorage({
+        key: upLoadPlans.number.toString(),
+        data: upLoadPlans,
+      });
     this.upLoad(upLoadPlans);
   },
 

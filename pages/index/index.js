@@ -66,42 +66,62 @@ Page({
 
 
   //
-  testName: function(testValue){
-    testValue="test";
-    console.log(this.testValue);
-    console.log(testValue);
-    
-   /* 
-    const client = mqtt.connect(host, options);
-    console.log(options.clientId);
-    */
-    
-    this.setData(
-      {time:20});
-  wx.navigateTo({
-      url: '../getUserInfo/getUserInfo',
-    })
-//old ends here
+//   testName: function(testValue){
+//     testValue="test";
+//     console.log(this.testValue);
+//     console.log(testValue);
+//     this.setData(
+//       {time:20});
+//   wx.navigateTo({
+//       url: '../getUserInfo/getUserInfo',
+//     })
+// //old ends here
 
-    var that = this;
-    that.data.client=app.globalData.client;
+//     var that = this;
+//     that.data.client=app.globalData.client;
   
-    that.data.client.on('connect',e=>{
-      console.log("ok");
-      that.data.client.subscribe('presence',function(err){
-        if(!err)
-        {
-          that.data.client.publish('presence','my first mqtt connection')
-        }
-      })
-    });
-    that.data.client.on('message',function(topic,message){
-      console.log(message.toString());
-      that.data.client.end();
+//     that.data.client.on('connect',e=>{
+//       console.log("ok");
+//       that.data.client.subscribe('presence',function(err){
+//         if(!err)
+//         {
+//           that.data.client.publish('presence','my first mqtt connection')
+//         }
+//       })
+//     });
+//     that.data.client.on('message',function(topic,message){
+//       console.log(message.toString());
+//       that.data.client.end();
       
-    })
+//     })
   
-  },
+//   },
+
+
+scanCodeSelf(){
+  wx.scanCode({
+    success:e=>{
+      console.log(e);
+    }
+  })
+},
+  
+
+initialization:function(){           //缓存数组编号
+    var numberArray=new Array();
+    for(let i=0;i<12;i++)
+    {
+      numberArray.push(null);
+    }
+    wx.setStorage({
+      key:"nmsl",
+      data:numberArray,
+      success:function(){
+        console.log("success");
+      }
+    })
+  }
+
  
 })
 
