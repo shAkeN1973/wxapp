@@ -15,7 +15,7 @@ Page({
     console.log(today,typeof(today));
     var that=this;
     var toolArray = new Array();                           //将渲染数组进行动态显示
-    for(let i=0;i<12;i++)
+    for(let i=0;i<8;i++)
     {
       if (numberArray[i] =="Occupied")
       {
@@ -85,7 +85,7 @@ Page({
 
 
   createNewPlan:function(){
-    for(let i=0;i<12;i++){
+    for(let i=0;i<8;i++){
     if(toolNumberArray[i]==null){
     console.log("progress maked here");
       wx.navigateTo({

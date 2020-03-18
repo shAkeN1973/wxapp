@@ -1,4 +1,4 @@
-<!--index.wxml-->
+<!--index.wxml
 <view class="container">
   <view class="userinfo">
     <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
@@ -13,6 +13,12 @@
     <text class="user-motto">{{motto}}</text>
   </view>
 </view>
-<text>当前事件：{{time}}</text>
+<text>当前事件：{{time}}</text>-->
+
+<canvas canvas-id="tryCanvas" class="canvasTry"  bindtouchstart="start" bindtouchmove="move" bindtouchend="end"> 
+</canvas>
+<view hidden="{{hidden}}">
+  Coordinates: ({{x}}, {{y}})
+</view>
 
 

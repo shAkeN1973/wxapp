@@ -169,7 +169,7 @@ getStorageSlef:function(){         //只有在输入药物名称的时候才可�
     key: 'nmsl',
     success(res) {
       console.log(res.data)
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < 8; i++) {
         if (res.data[i] == null) {
           upLoadPlans.number = i + 1;           //设置药盒编号
           res.data[i] = "Occupied"
@@ -357,7 +357,7 @@ refresh(plans){     //plans 按值传递
        //console.log("下面是Data中的数据")
      const newEventChannel = this.getOpenerEventChannel();//注意这里必须新声明一个新的eventChannel
      newEventChannel.emit('acceptDataFromHidePlanPage', { data: this.data.test });
-     
+    
    }
   },
 

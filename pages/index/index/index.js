@@ -1,7 +1,7 @@
 //index.js
 //获取应用实例
 const app = getApp()
-import mqtt from '../../library/mqtt.js';
+import mqtt from '../../../library/mqtt.js';
 
 Page({
   data: {                    //page页面数据定义
@@ -10,9 +10,92 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    time:(new Date()).toString()
+    time:(new Date()).toString(),
+    hidden:true,
+    oColor:"#8dc63f",
+    noColor:"#ff0000"
   },
 
+  drawCanvas:function(){  //进行画布的修改
+  let draw = wx.createCanvasContext('tryCanvas');  //获得canvas实例
+  
+  
+  draw.translate(100, 100);
+
+  var numberArray = wx.getStorageSync('nmsl');//获得缓存中储存的数组元素
+  
+  for(let i=0;i<8;i++){         //画圆
+  draw.beginPath();
+  draw.setLineWidth(4);
+  draw.setStrokeStyle('white')
+  draw.setLineJoin('round');
+  // draw.lineTo(90 , 0);
+  // draw.stroke();
+  draw.arc(0, 0, 90, Math.PI * 0.25*i+0.01,Math.PI*0.25*(i+1)-0.01);   //画圆
+  if(numberArray[i]){
+    draw.setFillStyle('orange');}
+  else{
+    draw.setFillStyle('#39b54a');
+  }
+  draw.lineTo(0, 0);
+  draw.closePath();           //闭合当前路径
+  draw.stroke();
+  // draw.setTextAlign('center');
+  // draw.strokeText('hah')
+  draw.fill();
+  if((i+1)==1){
+  draw.draw()}
+  else{
+    draw.draw('true');
+  }
+  }
+
+  draw.beginPath(); //画内圆
+  draw.arc(0,0,50,0,Math.PI*2);
+  draw.setFillStyle('white');
+  draw.fill();
+  draw.draw('true');
+
+
+
+for(let i=0;i<8;i++){
+  
+  draw.beginPath();//添加文字
+  draw.setFontSize(20);
+  //draw.moveTo(70*Math.cos(0.125*Math.PI),70*Math.sin(0.125*Math.PI))
+  draw.setFillStyle('black');
+  draw.setTextAlign('center');
+  draw.setTextBaseline('middle')
+  draw.font = 'italic bold 20px 微软雅黑'
+  draw.fillText((i+1).toString(), 70 * Math.cos(0.125 * Math.PI * (2*i+1)), 70 * Math.sin(0.125 * Math.PI*(2*i+1)));
+  draw.draw('true');
+}
+
+
+  
+
+  },
+
+  start(e) {
+    this.setData({
+      hidden: false,
+      x: e.touches[0].x,
+      y: e.touches[0].y
+    })
+  },
+  move(e) {
+    this.setData({
+      x: e.touches[0].x,
+      y: e.touches[0].y
+    })
+  },
+  end(e) {
+    this.setData({
+      hidden: true
+    })
+
+    
+  },
   
  
   //事件处理函数
@@ -24,6 +107,9 @@ Page({
 
 
   onLoad: function () {
+    this.initialization();          //调用设置缓存函数，保证不用手动添加
+
+    this.drawCanvas();
     //验证网络请求，getUserInfo
     if (app.globalData.userInfo) {
       this.setData({
@@ -52,6 +138,10 @@ Page({
       })
     }
   },
+
+
+
+
   getUserInfo: function(e) {
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo
@@ -108,8 +198,16 @@ scanCodeSelf(){
   
 
 initialization:function(){           //缓存数组编号
+try{
+  var value=wx.getStorageSync('nmsl')
+  if(value)
+  {
+    console.log('not first')
+  }
+}catch(e){
+  console.log(e);
     var numberArray=new Array();
-    for(let i=0;i<12;i++)
+    for(let i=0;i<8;i++)
     {
       numberArray.push(null);
     }
@@ -117,12 +215,11 @@ initialization:function(){           //缓存数组编号
       key:"nmsl",
       data:numberArray,
       success:function(){
-        console.log("success");
+      console.log("success");
       }
     })
   }
-
- 
+}
 })
 
 function randomString(len) {

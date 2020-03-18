@@ -19,3 +19,17 @@
 .usermotto {
   margin-top: 200px;
 }
+
+.canvasTry {
+  /*background-color:#8dc63f;*/
+  height:200px;
+  width:200px;
+  left: 60px;
+  right: 60px;
+  top:40px;
+  border:1px solid #5dac81
+}
+
+page{
+  background-color:white;
+}
