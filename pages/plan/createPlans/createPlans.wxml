@@ -17,7 +17,7 @@
 	<view class="cu-form-group">
 		<view class="title">每天顿数</view>
 		<input placeholder="请输入您每天吃药的顿数" bindinput="PickerChange" id="frequency"></input>
-    </view>
+  </view>
 	<view wx:if="{{indexTime!=null}}">
 	<block wx:for="{{array}}"wx:key="symbolTime" wx:for-item="item">
 		<view class="cu-form-group">

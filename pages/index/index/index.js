@@ -13,76 +13,134 @@ Page({
     time:(new Date()).toString(),
     hidden:true,
     oColor:"#8dc63f",
-    noColor:"#ff0000"
+    noColor:"#ff0000",
+    pickNumber:"0",//选定的数字
+    show:false,//m模态窗口显示
+    numberArray:null,
+    toolPlan:null
   },
 
   drawCanvas:function(){  //进行画布的修改
-  let draw = wx.createCanvasContext('tryCanvas');  //获得canvas实例
-  
-  
-  draw.translate(100, 100);
+    let draw = wx.createCanvasContext('tryCanvas');  //获得canvas实例
+    draw.translate(100, 100);
+    var numberArray = wx.getStorageSync('nmsl');//获得缓存中储存的数组元素
+    this.setData({
+      numberArray:numberArray
+    })
+    for(let i=0;i<8;i++){         //画圆
+    draw.beginPath();
+    draw.setLineWidth(4);
+    draw.setStrokeStyle('white')
+    draw.setLineJoin('round');
+    // draw.lineTo(90 , 0);
+    // draw.stroke();
+    draw.arc(0, 0, 90, Math.PI * 0.25*i+0.01,Math.PI*0.25*(i+1)-0.01);   //画圆
+    if(numberArray[i]){
+      draw.setFillStyle('orange');}
+    else{
+      draw.setFillStyle('#39b54a');
+    }
+    draw.lineTo(0, 0);
+    draw.closePath();           //闭合当前路径
+    draw.stroke();
+    // draw.setTextAlign('center');
+    // draw.strokeText('hah')
+    draw.fill();
+    if((i+1)==1){
+    draw.draw()}
+    else{
+      draw.draw('true');
+    }
+    }
 
-  var numberArray = wx.getStorageSync('nmsl');//获得缓存中储存的数组元素
-  
-  for(let i=0;i<8;i++){         //画圆
-  draw.beginPath();
-  draw.setLineWidth(4);
-  draw.setStrokeStyle('white')
-  draw.setLineJoin('round');
-  // draw.lineTo(90 , 0);
-  // draw.stroke();
-  draw.arc(0, 0, 90, Math.PI * 0.25*i+0.01,Math.PI*0.25*(i+1)-0.01);   //画圆
-  if(numberArray[i]){
-    draw.setFillStyle('orange');}
-  else{
-    draw.setFillStyle('#39b54a');
-  }
-  draw.lineTo(0, 0);
-  draw.closePath();           //闭合当前路径
-  draw.stroke();
-  // draw.setTextAlign('center');
-  // draw.strokeText('hah')
-  draw.fill();
-  if((i+1)==1){
-  draw.draw()}
-  else{
+    draw.beginPath(); //画内圆
+    draw.arc(0,0,50,0,Math.PI*2);
+    draw.setFillStyle('white');
+    draw.fill();
+    draw.draw('true');
+
+  for(let i=0;i<8;i++){
+    draw.beginPath();//添加文字
+    // draw.rotate(0-0.5*Math.PI);
+    draw.setFontSize(20);
+    //draw.moveTo(70*Math.cos(0.125*Math.PI),70*Math.sin(0.125*Math.PI))
+    draw.setFillStyle('black');
+    draw.setTextAlign('center');
+    draw.setTextBaseline('middle')
+    draw.font = 'italic bold 20px 微软雅黑'
+    draw.fillText((i+1).toString(), 70 * Math.cos(0.125 * Math.PI * (2*i+1)), 70 * Math.sin(0.125 * Math.PI*(2*i+1)));
     draw.draw('true');
   }
-  }
-
-  draw.beginPath(); //画内圆
-  draw.arc(0,0,50,0,Math.PI*2);
-  draw.setFillStyle('white');
-  draw.fill();
-  draw.draw('true');
-
-
-
-for(let i=0;i<8;i++){
-  
-  draw.beginPath();//添加文字
-  draw.setFontSize(20);
-  //draw.moveTo(70*Math.cos(0.125*Math.PI),70*Math.sin(0.125*Math.PI))
-  draw.setFillStyle('black');
-  draw.setTextAlign('center');
-  draw.setTextBaseline('middle')
-  draw.font = 'italic bold 20px 微软雅黑'
-  draw.fillText((i+1).toString(), 70 * Math.cos(0.125 * Math.PI * (2*i+1)), 70 * Math.sin(0.125 * Math.PI*(2*i+1)));
-  draw.draw('true');
-}
-
-
-  
-
   },
 
-  start(e) {
+
+  start(e) { //选定当前药仓
+    var x=e.touches[0].x-100;
+    var y=e.touches[0].y-100;
+    var pickNumber=0; //选取的数字
+    var angle =360 * Math.atan(y/x) / (2 * Math.PI);
+    if(angle>0&&angle<45)
+    {
+      if(x>0)
+      {
+        pickNumber=1;
+      }
+      else
+      {
+        pickNumber=5;
+      }
+    }
+    else if (angle > 45){
+      if(x>0)
+      {
+        pickNumber=2;
+      }
+      else{
+        pickNumber=6;
+      }
+    }
+    if (angle<0 && angle<-45) {
+      if (x > 0) {
+        pickNumber = 7;
+      }
+      else {
+        pickNumber = 3;
+      }
+    }
+    else if (angle < 0 && angle >-45){
+      if (x > 0) {
+        pickNumber = 8;
+      }
+      else {
+        pickNumber = 4;
+      }
+    }
+    if(this.data.numberArray[pickNumber-1]){     
     this.setData({
       hidden: false,
       x: e.touches[0].x,
-      y: e.touches[0].y
+      y: e.touches[0].y,
+      pickNumber:pickNumber,
+      show:true
+    })}
+    this.getPlans(pickNumber);
+  },
+
+  hideModal(){   //隐藏模态框
+    this.setData({
+      show:false,
+      pickNumber:0
     })
   },
+
+  getPlans(number){  //获得药仓所对应的服药计划
+    var toolPlan = wx.getStorageSync(number.toString());
+    // console.log(toolPlan)
+    this.setData({
+      toolPlan:toolPlan
+    })
+  },
+
   move(e) {
     this.setData({
       x: e.touches[0].x,

@@ -26,10 +26,16 @@
   width:200px;
   left: 60px;
   right: 60px;
-  top:40px;
-  border:1px solid #5dac81
+  top:0px;
+  border:1px solid white
 }
 
 page{
   background-color:white;
+}
+
+.textShow{
+  margin-top:40px;
+  text-align: center;
+  color: blueviolet;
 }

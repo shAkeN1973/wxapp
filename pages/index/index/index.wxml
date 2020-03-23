@@ -14,10 +14,49 @@
   </view>
 </view>
 <text>当前事件：{{time}}</text>-->
-
+ <view class="cu-bar justify-center bg-white">
+    <view class="action sub-title">
+      <text class="text-xl text-bold text-green text-xxl">当前药盒状态</text>
+      <text class="text-ABC text-green">NMSL</text>
+      <!-- last-child选择器-->
+    </view>
+  </view>
 <canvas canvas-id="tryCanvas" class="canvasTry"  bindtouchstart="start" bindtouchmove="move" bindtouchend="end"> 
 </canvas>
-<view hidden="{{hidden}}">
+
+<!--模态窗口-->
+<view class="cu-modal {{show?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">药仓编号：{{pickNumber}}</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="cu-list menu ">
+    <view class="cu-item">
+      <view class="content">
+        <text class="text-black text-xl">药物名称：</text>
+        <text class="text-red text-xl">{{toolPlan.name}}</text>
+      </view>
+    </view>
+     <view class="cu-item">
+      <view class="content">
+        <text class="text-black text-xl">药仓状态：</text>
+        <text class="text-green text-xl">正常</text>
+      </view>
+    </view>
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+        <button class="cu-btn line-green text-green" bindtap="hideModal">确定</button>
+      </view>
+    </view>
+  </view>
+</view>
+
+
+<view hidden="{{hidden}}" class="textShow">
   Coordinates: ({{x}}, {{y}})
 </view>
 
