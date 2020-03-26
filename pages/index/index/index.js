@@ -17,7 +17,8 @@ Page({
     pickNumber:"0",//选定的数字
     show:false,//m模态窗口显示
     numberArray:null,
-    toolPlan:null
+    toolPlan:null,
+    freeRoom:'',
   },
 
   drawCanvas:function(){  //进行画布的修改
@@ -39,6 +40,7 @@ Page({
       draw.setFillStyle('orange');}
     else{
       draw.setFillStyle('#39b54a');
+      this.data.freeRoom = this.data.freeRoom+(i+1).toString()+',';
     }
     draw.lineTo(0, 0);
     draw.closePath();           //闭合当前路径
@@ -52,7 +54,10 @@ Page({
       draw.draw('true');
     }
     }
-
+    this.setData({
+      freeRoom: this.data.freeRoom.substr(0, this.data.freeRoom.length - 1)
+    })
+    // console.log(this.data.freeRoom);
     draw.beginPath(); //画内圆
     draw.arc(0,0,50,0,Math.PI*2);
     draw.setFillStyle('white');

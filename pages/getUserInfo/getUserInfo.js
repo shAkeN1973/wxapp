@@ -74,13 +74,11 @@ Page({
         if (!err) {
             console.log("here")
             that.data.client.on('message', function (topic, message) {
-            console.log(message.toString());
-            that.data.client.end();
+              if(topic=='ask'){            console.log(message.toString());
+            that.data.client.end();}
           })
         }
       },)
     });
-    
-
   }
 })

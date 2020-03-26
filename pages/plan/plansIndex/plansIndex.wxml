@@ -21,7 +21,7 @@
     <view class="cu-item arrow">
       <navigator class="content" url="../conditions/conditions?number={{item.number}}" hover-class="none">
         <image src="/images/pills.png" class="png" mode="aspectFit"></image>
-        <text class="text-grey" space="nbsp">药仓：{{item.number}}                        药物名称：{{item.name}}</text>
+        <text class="text-grey" space="nbsp">药仓：{{item.number}}              药物名称：{{item.name}}</text>
       </navigator>
     </view>
     </block>

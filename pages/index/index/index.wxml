@@ -55,9 +55,23 @@
   </view>
 </view>
 
+<view class="cu-list menu card-menu margin-top">
+    <view class="cu-item ">
+      <view class="content">
+        <text class="cuIcon-circlefill text-pink text-xxl"></text>
+        <text class="text-blue text-xxl">当前空闲药盒编号：</text>
+        <text class="text-green text-xxl">{{freeRoom}}</text>
+      </view>
+    </view>
+    <view class="cu-item ">
+      <view class="content">
+        <text class="cuIcon-emoji text-pink text-xxl"></text>
+        <text class="text-blue text-xxl">当前药盒状态：</text>
+        <text class="text-green text-xxl">已连接</text>
+      </view>
+    </view>
+ </view>
 
-<view hidden="{{hidden}}" class="textShow">
-  Coordinates: ({{x}}, {{y}})
-</view>
+
 
 
