@@ -156,8 +156,6 @@ Page({
     this.setData({
       hidden: true
     })
-
-    
   },
   
  
