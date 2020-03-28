@@ -70,13 +70,12 @@ Page({
     that.data.client = app.globalData.client;
     that.data.client.on('connect', e => {
       console.log("ok");
-      that.data.client.subscribe('ask', function (err) {
+      that.data.client.subscribe('userShAkeN/plans/阿莫西林/save', function (err) {
         if (!err) {
             console.log("here")
             that.data.client.on('message', function (topic, message) {
-              if(topic=='ask'){           
-                 console.log(message.toString());
-            that.data.client.end();}
+            console.log(message.toString());
+            that.data.client.end();
           })
         }
       },)

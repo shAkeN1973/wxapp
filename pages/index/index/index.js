@@ -19,6 +19,7 @@ Page({
     numberArray:null,
     toolPlan:null,
     freeRoom:'',
+    connectConfirm:false
   },
 
   drawCanvas:function(){  //进行画布的修改
@@ -171,6 +172,11 @@ Page({
     this.initialization();          //调用设置缓存函数，保证不用手动添加
 
     this.drawCanvas();
+    if(app.globalData.client){
+      this.setData({
+        connectConfirm:true
+      })
+    }
     //验证网络请求，getUserInfo
     if (app.globalData.userInfo) {
       this.setData({
@@ -265,20 +271,21 @@ try{
   {
     console.log('not first')
   }
-}catch(e){
-  console.log(e);
-    var numberArray=new Array();
-    for(let i=0;i<8;i++)
-    {
+  else{
+    var numberArray = new Array();
+    for (let i = 0; i < 8; i++) {
       numberArray.push(null);
     }
     wx.setStorage({
-      key:"nmsl",
-      data:numberArray,
-      success:function(){
-      console.log("success");
+      key: "nmsl",
+      data: numberArray,
+      success: function () {
+        console.log("success");
       }
     })
+  }
+}catch(e){
+    console.log(e);
   }
 }
 })

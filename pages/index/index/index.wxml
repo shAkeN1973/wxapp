@@ -67,7 +67,7 @@
       <view class="content">
         <text class="cuIcon-check text-pink text-xxl"></text>
         <text class="text-black text-xxl">当前药盒状态：</text>
-        <text class="text-green text-xxl">已连接</text>
+        <text class="text-{{connectConfirm?'green':'red'}} text-xxl">{{connectConfirm?'已连接':'未连接'}}</text>
       </view>
     </view>
  </view>

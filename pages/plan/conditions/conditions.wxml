@@ -1,4 +1,37 @@
-  <view class="cu-bar bg-white solid-bottom margin-top">
+
+  
+<view class='cu-load load-modal' wx:if="{{showLoading}}">
+  <image src='/images/logo.png' class='png' mode='aspectFit'></image>
+  <view class='gray-text'>加载中...</view>
+</view>
+
+<view class="cu-modal {{showSaveHelp?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">提示信息</view>
+      <view class="action" bindtap="backToPlansIndex">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="cu-list menu ">
+    <view class="cu-item">
+      <view class="content">
+        <text class="text-red text-xl">药物还未存入，是否存药？</text>
+        <!-- <text class="text-red text-xl">{{toolPlan.name}}</text> -->
+      </view>
+    </view>
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+        <button class="cu-btn line-green text-green" bindtap="goToSaveHelp">确定</button>
+      </view>
+    </view>
+  </view>
+</view>
+
+<block wx:if="{{showAll}}">
+  
+  <view class="cu-bar bg-white solid-bottom margin-top" >
   <view class="action">
     <text class="cuIcon-title text-blue"></text> 日期
   </view>
@@ -67,4 +100,4 @@
     <view class="bg-{{persent2>60?'orange':'green'}}" style="width:{{persent}};">{{persent2}}%</view>
   </view>
 </view>
-  
+</block>

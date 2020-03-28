@@ -6,7 +6,7 @@ const host =
 const options = {
   protocolVersion: 4, //MQTT连接协议版本
   //clientId: randomString(10),
-  clientId: "abcdefg",
+  clientId: "userShAkeN",
   clean: true,
   //username: '1v1r5ep/zhihu_iamliubo',
   //password: 'tNVKODyl2chbm5yp',
@@ -73,7 +73,7 @@ App({
 
   globalData: {
     userInfo: null,
-    client_ID: randomString(10),
+    client_ID: options.clientId,
     client: mqtt.connect(host, options),
   }
 })

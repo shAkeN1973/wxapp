@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    client:null,
+    client:null,             //获取全局对象
     scroll:0,
     number:null,
     dateArray:[],
@@ -19,7 +19,27 @@ Page({
     persent2:0,
     timer:[],
     toolArray:[],
-    show:false
+    show:false,
+    showLoading:true,
+    showAll:false,
+    showSaveHelp:false
+  },
+  
+
+  goToSaveHelp:function()       //跳转至存药页面
+  {
+    wx.redirectTo({
+      url: "../../index/saveHelp/saveHelp",
+    }, success => {
+      console.log('sucess')
+    })
+  },
+
+
+  backToPlansIndex:function(){
+    wx.navigateTo({
+      url: "../plansIndex/plansindex.js",
+    })
   },
 
   detail:function(e){
@@ -55,31 +75,31 @@ Page({
 
 
   mqttConnet:function(e){
-    var that = this;
-    that.data.client = app.globalData.client;
-    that.data.client.on('connect', e => {
-      console.log("ok");
-      that.data.client.subscribe('ask', function (err) {
-        if (!err) {
-          console.log("here")
-          that.data.client.publish('ask', that.data.number.toString())
-        }
-      })
-    });
-    that.data.client.subscribe('ask'+that.data.number.toString(),function(err){
-      if(!err){
-        that.data.client.on('message',function(topic,message){
-          var obj=JSON.parse(message);
-          if(obj instanceof Array){
-            //write somthing
-            that.setData({
-              toolArray:obj
-            })
-            // console.log(obj,that.data.toolArray);
-          }
-        })
-      }
-    })
+    // var that = this;
+    // that.data.client = app.globalData.client;
+    // that.data.client.on('connect', e => {
+    //   console.log("ok");
+    //   that.data.client.subscribe('ask', function (err) {
+    //     if (!err) {
+    //       console.log("here")
+    //       that.data.client.publish('ask', that.data.number.toString())
+    //     }
+    //   })
+    // });
+    // that.data.client.subscribe('ask'+that.data.number.toString(),function(err){
+    //   if(!err){
+    //     that.data.client.on('message',function(topic,message){
+    //       var obj=JSON.parse(message);
+    //       if(obj instanceof Array){
+    //         //write somthing
+    //         that.setData({
+    //           toolArray:obj
+    //         })
+    //         // console.log(obj,that.data.toolArray);
+    //       }
+    //     })
+    //   }
+    // })
   },
 
 
@@ -109,8 +129,47 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var toolPlan = wx.getStorageSync(options.number.toString());
-    
+    var toolPlan = wx.getStorageSync(options.number.toString());    //从缓存中获取药物数据
+    if (!toolPlan.start){ //如果缓存中start值为假，则进行mqtt传输测试,这里是为了在机器上操作后没有在小程序上操作
+      var that = this;
+      that.data.client = app.globalData.client;
+      console.log(this.subscribeTopicConnect(toolPlan.name));
+      that.data.client.subscribe(this.subscribeTopicConnect(toolPlan.name),function(err){if(!err){console.log('here')}})
+      that.data.client.on('message',function(topic,message){//监听器只能获得字样，而不能判断是否有消息传送...
+        console.log(message.toString())
+        var exp=new RegExp('ok','g'); //设立正则表达式，匹配message中的ok字样
+        if(exp.test(message.toString())) 
+        {
+          //若有存药，则将等待标志去除
+          that.setData({
+            showLoading:false,
+            showAll:true
+          })
+          toolPlan.start=true;         //设定已经存药
+          wx.setStorage({
+            key:options.number.toString() ,
+            data: toolPlan,
+          });
+        }
+      });
+      setTimeout(function(){
+        if(!that.data.showAll)
+        {
+          that.setData({
+          showLoading:false,
+          showSaveHelp:true
+          })
+          that.data.client.end();
+        }
+      },30000)
+    }
+    else{
+      this.setData({
+        showLoading: false,
+        showAll: true
+      })
+    }
+
     var today = util.formatTime(new Date());  //获得今天的日期
     var toolTodayDate=this.date1(today);
    this.setData(                          //从plansIndex页面传过来的number
@@ -123,6 +182,10 @@ Page({
    );
     this.scrollSteps();
     this.mqttConnet();
+  },
+
+  subscribeTopicConnect:function(mName){
+    return app.globalData.client_ID.toString()+'/plans/'+mName.toString()+'/save'
   },
 
 

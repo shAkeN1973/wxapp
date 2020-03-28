@@ -29,7 +29,8 @@ var upLoadPlans={   //上传数组
   timer:[],        //每天的服药时间段
   drugsInOneDay:null,   //每天吃多少
   dateArray:[],        //日期数组，可能不会要但是得写上
-  afterOrBefore:null   //饭前吃还是饭后吃
+  afterOrBefore:null,  //饭前吃还是饭后吃
+  start:false
 };
 
 Page({
