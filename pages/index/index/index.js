@@ -3,6 +3,8 @@
 const app = getApp()
 import mqtt from '../../../library/mqtt.js';
 
+
+
 Page({
   data: {                    //page页面数据定义
     client: null,  
@@ -21,6 +23,8 @@ Page({
     freeRoom:'',
     connectConfirm:false
   },
+
+
 
   drawCanvas:function(){  //进行画布的修改
     let draw = wx.createCanvasContext('tryCanvas');  //获得canvas实例
@@ -80,6 +84,9 @@ Page({
   },
 
 
+
+
+
   start(e) { //选定当前药仓
     var x=e.touches[0].x-100;
     var y=e.touches[0].y-100;
@@ -132,12 +139,18 @@ Page({
     this.getPlans(pickNumber);
   },
 
+
+
+
   hideModal(){   //隐藏模态框
     this.setData({
       show:false,
       pickNumber:0
     })
   },
+
+
+
 
   getPlans(number){  //获得药仓所对应的服药计划
     var toolPlan = wx.getStorageSync(number.toString());
@@ -158,6 +171,9 @@ Page({
       hidden: true
     })
   },
+
+
+
   
  
   //事件处理函数
@@ -170,8 +186,7 @@ Page({
 
   onLoad: function () {
     this.initialization();          //调用设置缓存函数，保证不用手动添加
-
-    this.drawCanvas();
+    this.drawCanvas();              //调用画布函数
     if(app.globalData.client){
       this.setData({
         connectConfirm:true
@@ -289,6 +304,9 @@ try{
   }
 }
 })
+
+
+
 
 function randomString(len) {
   len = len || 32;

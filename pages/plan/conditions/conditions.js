@@ -36,13 +36,16 @@ Page({
   },
 
 
-  backToPlansIndex:function(){
+
+  backToPlansIndex:function(){   //当点击模态窗口上的红×时跳转回planINdex页面
     wx.navigateTo({
       url: "../plansIndex/plansindex.js",
     })
   },
 
-  detail:function(e){
+
+
+  detail:function(e){         //显示当天的服药时间
     console.log(e);
     var obj=this.data.toolArray;
     // console.log(obj)
@@ -67,14 +70,14 @@ Page({
   },
 
 
-  hideModal:function(){
+  hideModal:function(){           //隐藏服药时间模态窗口
     this.setData({
       show: false
     })
   },
 
 
-  mqttConnet:function(e){
+  mqttConnet:function(e){       //进行mqtt的连接，此链接是获得当天的服药时间
     // var that = this;
     // that.data.client = app.globalData.client;
     // that.data.client.on('connect', e => {
@@ -103,24 +106,28 @@ Page({
   },
 
 
-  scrollSteps:function() {
+
+  
+  scrollSteps:function() {     //进行横向日期的更改
     var that=this;
     for (let i = 0; i < this.data.dateArray.length;i++)
     {
       var toolDate = this.date2(this.data.dateArray[i]);
-      if (toolDate.year >=parseInt(this.data.todayDate.year) && toolDate.month >=parseInt(this.data.todayDate.month) && toolDate.day >= parseInt(this.data.todayDate.day)){
-      break;}
-      var str = parseInt(((i+1 )/ this.data.dateArray.length)*100);
-      var str2=str.toString()+"%"
-      this.setData({
-        scroll: this.data.scroll + 1,
-        persent2:str,
-        persent:str2,
-      })
+      console.log(toolDate.year)
+      if (toolDate.year <=this.data.todayDate.year && toolDate.month <= this.data.todayDate.month && toolDate.day <= this.data.todayDate.day){
+        var str = parseInt(((i + 1) / this.data.dateArray.length) * 100);
+        var str2 = str.toString() + "%"
+        this.setData({                              //设置滚动的日期
+          scroll: this.data.scroll + 1,
+          persent2: str,
+          persent: str2,
+        })
+      }
+      else{
+        break;                  //满足条件时跳出循环
+      }
+      toolDate=null;
     }
-    // this.setData({
-    //   scroll: this.data.scroll == 9 ? 0 : this.data.scroll + 1
-    // })
   },
 
 
@@ -133,7 +140,7 @@ Page({
     if (!toolPlan.start){ //如果缓存中start值为假，则进行mqtt传输测试,这里是为了在机器上操作后没有在小程序上操作
       var that = this;
       that.data.client = app.globalData.client;
-      console.log(this.subscribeTopicConnect(toolPlan.name));
+      // console.log(this.subscribeTopicConnect(toolPlan.name));
       that.data.client.subscribe(this.subscribeTopicConnect(toolPlan.name),function(err){if(!err){console.log('here')}})
       that.data.client.on('message',function(topic,message){//监听器只能获得字样，而不能判断是否有消息传送...
         console.log(message.toString())
@@ -184,13 +191,15 @@ Page({
     this.mqttConnet();
   },
 
-  subscribeTopicConnect:function(mName){
+
+
+  subscribeTopicConnect:function(mName){                             //进行mqtt的topic的拼接
     return app.globalData.client_ID.toString()+'/plans/'+mName.toString()+'/save'
   },
 
 
 
-  date1: function (today) {
+  date1: function (today) {                                   //对设定的日期数组进行分离
     var todayDate = {
       year: null,
       month: null,
@@ -206,7 +215,9 @@ Page({
     return todayDate;
   },
 
-  date2: function (today) {
+
+
+  date2: function (today) {             //获取当天日期进行
     var todayDate = {
       year: null,
       month: null,
@@ -219,6 +230,7 @@ Page({
     todayDate.day = parseInt(today.substring(7, 9));
     todayDate.hour = parseInt(today.substring(11, 13));
     todayDate.minute = parseInt(today.substring(14, 17));
+    // console.log(todayDate);
     return todayDate;
   },
 
