@@ -16,8 +16,8 @@
 <text>当前事件：{{time}}</text>-->
  <view class="cu-bar justify-center bg-white">
     <view class="action sub-title">
-      <text class="text-xl text-bold text-green text-xxl">当前药盒状态</text>
-      <text class="text-ABC text-green">NMSL</text>
+      <text class="text-xl text-bold text-green text-xxl">当前药仓状态</text>
+      <text class="text-ABC text-green">conditions</text>
       <!-- last-child选择器-->
     </view>
   </view>

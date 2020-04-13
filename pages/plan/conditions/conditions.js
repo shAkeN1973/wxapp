@@ -1,4 +1,4 @@
-const app = getApp()
+const app = getApp();
 import mqtt from '../../../library/mqtt.js';
 var util = require('../../../utils/util.js');
 
@@ -29,7 +29,7 @@ Page({
   goToSaveHelp:function()       //跳转至存药页面
   {
     wx.redirectTo({
-      url: "../../index/saveHelp/saveHelp",
+      url: "../../index/saveHelp/saveHelp?number=this.data.number",
     }, success => {
       console.log('sucess')
     })
