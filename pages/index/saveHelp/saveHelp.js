@@ -16,6 +16,9 @@ Page({
     var that=this;
     that.data.client=app.globalData.client;  //初始化
     var plan=wx.getStorageSync(options.number.toString());
+    this.setData({
+      plan:plan
+    })
 
 
     that.data.client.on('connect',function(err){       //测试是否连接上
