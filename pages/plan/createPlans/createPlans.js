@@ -232,7 +232,7 @@ upLoad(upLoadPlans){
     var that = this;
     that.data.client = app.globalData.client;
     that.data.client.on('connect', e => {
-      console.log("ok");
+      console.log("药物上传连接成功");
       that.data.client.subscribe('presence', function (err) {
         if (!err) {
           that.data.client.publish('presence', newJson)
@@ -240,7 +240,7 @@ upLoad(upLoadPlans){
       })
     });
     that.data.client.on('message', function (topic, message) {
-      console.log(message.toString());
+      console.log(message.toString(),"这是接受到的信息，接下来将关闭mqtt连接");
       that.data.client.end();
   })
  

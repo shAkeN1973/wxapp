@@ -28,8 +28,9 @@ Page({
 
   goToSaveHelp:function()       //跳转至存药页面
   {
+    var urlNumber="../../index/saveHelp/saveHelp?number="+this.data.number.toString();    //拼接url
     wx.redirectTo({
-      url: "../../index/saveHelp/saveHelp?number=this.data.number",
+      url: urlNumber,
     }, success => {
       console.log('sucess')
     })
@@ -141,7 +142,7 @@ Page({
       var that = this;
       that.data.client = app.globalData.client;
       // console.log(this.subscribeTopicConnect(toolPlan.name));
-      that.data.client.subscribe(this.subscribeTopicConnect(toolPlan.name),function(err){if(!err){console.log('here')}})
+      that.data.client.subscribe(this.subscribeTopicConnect(toolPlan.name),function(err){if(!err){console.log('订阅成功')}})
       that.data.client.on('message',function(topic,message){//监听器只能获得字样，而不能判断是否有消息传送...
         console.log(message.toString())
         var exp=new RegExp('ok','g'); //设立正则表达式，匹配message中的ok字样
