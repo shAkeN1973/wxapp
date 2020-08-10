@@ -1,14 +1,30 @@
 <view class="cu-list menu card-menu margin-top listView">
     <view class="cu-item ">
       <view class="content">
-        <text class="text-black text-xxl">当前空闲药盒编号：</text>
-        <text class="text-green text-xxl">{{freeRoom}}</text>
-      </view>
-    </view>
-    <view class="cu-item ">
-      <view class="content">
-        <text class="text-black text-xxl">当前药盒状态：</text>
-        <text class="text-{{connectConfirm?'green':'red'}} text-xxl">{{connectConfirm?'已连接':'未连接'}}</text>
+        <text class="text-black text-xxl">请确认以下服药信息：</text>
       </view>
     </view>
  </view>
+
+ <view class="cu-timeline">
+  <view class="cu-time">药仓：{{number}}</view>
+  <view class="cu-item cur cuIcon-noticefill">
+    <view class="content bg-green shadow-blur">
+    <!--<text>22:22</text> 【广州市】快件已到达地球-->
+    <text class="text-white text-xxl">当前药盒状态：</text>
+    <text class="text-{{showLoading?'blue':'red'}} text-xxl">{{showLoading?'未连接':'已连接'}}</text>
+    </view>
+  </view>
+  <view class="cu-item text-red cuIcon-attentionforbidfill">
+    <view class="content bg-grey shadow-blur">
+     <text class="text-white text-xxl"> 药物名称：{{plan.name}}
+     </text>
+    </view>
+  </view>
+  <view class="cu-item text-blue cuIcon-evaluate_fill">
+    <view class=" content bg-cyan shadow-blur">
+    <text class="text-white text-xxl">药物数量：≥{{amount}}
+    </text>
+    </view>
+  </view>
+</view>

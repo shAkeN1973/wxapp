@@ -169,7 +169,7 @@ Page({
           })
           that.data.client.end();
         }
-      },30000)
+      },3000)
     }
     else{
       this.setData({

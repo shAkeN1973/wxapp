@@ -15,6 +15,13 @@ const options = {
   resubscribe: true
 };
 App({
+  globalData: {
+    userInfo: null,
+    client_ID: options.clientId,
+    client: mqtt.connect(host, options),
+    CONNECT:true
+  },
+
   onLaunch: function () {
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
@@ -68,15 +75,20 @@ App({
           }
         }
       })
+      var that=this;
+      this.globalData.client.on('connect',function(err){
+        if(!err){
+          that.globalData.CONNECT=false;
+          console.log(that.globalData.CONNECT);
+        }
+      })
+
   },
 
 
-  globalData: {
-    userInfo: null,
-    client_ID: options.clientId,
-    client: mqtt.connect(host, options),
-  }
+
 })
+
 
 
 function randomString(len) {
