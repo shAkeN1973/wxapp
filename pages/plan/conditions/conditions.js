@@ -167,7 +167,7 @@ Page({
           showLoading:false,
           showSaveHelp:true
           })
-          that.data.client.end();
+          // that.data.client.end();
         }
       },3000)
     }

@@ -6,10 +6,10 @@ Page({
     number:null,
     client:null,
     plan:null,
-    showLoading:true,
+    showLoading:true,       //展示是否正在进行mqttt连接
     date:null,
-    amount:null,
-    success:false
+    amount:null,            //药物数量
+    success:false,          //是否存药成功
   },
 
   onLoad:function(options){                 //获取从上个页面传过来的药仓数字
@@ -40,9 +40,15 @@ Page({
         console.log(message.toString())
         var exp=new RegExp('ok','g'); //设立正则表达式，匹配message中的ok字样
         if(exp.test(message.toString())){
+          that.data.plan.start=true;
           that.setData({
-            success:true
+            success:true,
+            plan:plan
           })
+          wx.setStorage({
+            key: that.data.number.toString(),
+            data: that.data.plan,
+          });
         }  
       })
     })
@@ -64,7 +70,27 @@ Page({
     this.setData({
       amount:Amount
     })
+  },
+
+  manual:function(){
+    if(!this.data.success){
+      this.data.plan.start=true;
+      console.log(this.data.plan);
+      wx.setStorage({
+        key: this.data.number.toString(),
+        data: this.data.plan,
+      });
+      this.backToCondition();
+    }
+  },
+
+  backToCondition:function(){
+    var urlNumber="../../plan/conditions/conditions?number="+this.data.number.toString();    //拼接url
+    wx.redirectTo({
+      url: urlNumber,
+    }, success => {
+      console.log('sucess')
+    })
   }
-  
 })
 

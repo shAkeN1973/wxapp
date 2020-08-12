@@ -241,7 +241,7 @@ upLoad(upLoadPlans){
     });
     that.data.client.on('message', function (topic, message) {
       console.log(message.toString(),"这是接受到的信息，接下来将关闭mqtt连接");
-      that.data.client.end();
+      // that.data.client.end();
   })
  
 },
