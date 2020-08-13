@@ -1,5 +1,6 @@
 const app = getApp();
 var util = require('../../../utils/util.js');
+var plugin = requirePlugin("WechatSI");
 
 Page({
   data:{
@@ -91,6 +92,32 @@ Page({
     }, success => {
       console.log('sucess')
     })
+  },
+
+  voiceHelp:function(){
+    var voice="请确认存入的药物是："+this.data.plan.name
+    var voice2='奥里给干了'
+    plugin.textToSpeech({
+      lang: "zh_CN",
+      tts: true,
+      content: voice2,
+      success: function(res) {
+          console.log("succ tts", res.filename);
+          const innerAudioContext = wx.createInnerAudioContext();
+          innerAudioContext.autoplay = true
+          innerAudioContext.src = res.filename.toString()
+            innerAudioContext.onPlay(() => {
+              console.log('开始播放')
+            })
+            innerAudioContext.onError((res) => {
+              console.log(res.errMsg)
+              console.log(res.errCode)
+            })
+      },
+      fail: function(res) {
+          console.log("fail tts", res)
+      }
+  })
   }
 })
 
