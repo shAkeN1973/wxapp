@@ -11,6 +11,8 @@ Page({
     date:null,
     amount:null,            //药物数量
     success:false,          //是否存药成功
+    voiceStart:false,       //是否开始语音辅助存药
+    playHelpGif:false
   },
 
   onLoad:function(options){                 //获取从上个页面传过来的药仓数字
@@ -95,29 +97,49 @@ Page({
   },
 
   voiceHelp:function(){
+    this.setData({
+      voiceStart:true
+    })
     var voice="请确认存入的药物是："+this.data.plan.name
-    var voice2='奥里给干了'
-    plugin.textToSpeech({
-      lang: "zh_CN",
-      tts: true,
-      content: voice2,
-      success: function(res) {
-          console.log("succ tts", res.filename);
-          const innerAudioContext = wx.createInnerAudioContext();
-          innerAudioContext.autoplay = true
-          innerAudioContext.src = res.filename.toString()
-            innerAudioContext.onPlay(() => {
-              console.log('开始播放')
-            })
-            innerAudioContext.onError((res) => {
-              console.log(res.errMsg)
-              console.log(res.errCode)
-            })
-      },
-      fail: function(res) {
-          console.log("fail tts", res)
-      }
-  })
+    playVoice(voice);
+  },
+
+
+  playHelpGif:function(){
+    this.setData({
+      voiceStart:false,
+      playHelpGif:true
+    })
+    var step1="请遵照图片指示将药物存放到相应位置"
+    var step2="请按动图片所示位置的存药按钮"
+    playVoice(step1);
+    setTimeout(function(){
+      playVoice(step2)
+    },10000)
+
   }
 })
 
+function playVoice(text){
+  plugin.textToSpeech({
+    lang: "zh_CN",
+    tts: true,
+    content: text,
+    success: function(res) {
+        console.log("succ tts", res.filename);
+        const innerAudioContext = wx.createInnerAudioContext();
+        innerAudioContext.autoplay = true
+        innerAudioContext.src = res.filename.toString()
+          innerAudioContext.onPlay(() => {
+            console.log('开始播放')
+          })
+          innerAudioContext.onError((res) => {
+            console.log(res.errMsg)
+            console.log(res.errCode)
+          })
+    },
+    fail: function(res) {
+        console.log("fail tts", res)
+    }
+})
+}

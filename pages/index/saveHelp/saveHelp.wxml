@@ -1,64 +1,132 @@
-<view class="cu-list menu card-menu margin-top listView">
-    <view class="cu-item ">
-      <view class="content">
-        <text class="text-black text-xxl">请确认以下服药信息：</text>
+
+<block wx:if="{{!playHelpGif}}">
+
+  <view class="cu-list menu card-menu margin-top listView">
+      <view class="cu-item ">
+        <view class="content">
+          <text class="text-black text-xxl">请确认以下服药信息：</text>
+        </view>
+      </view>
+  </view>
+
+  <view class="cu-timeline">
+    <view class="cu-time">药仓：{{number}}</view>
+    <view class="cu-item cur cuIcon-noticefill">
+      <view class="content bg-green shadow-blur">
+      <!--<text>22:22</text> 【广州市】快件已到达地球-->
+      <text class="text-white text-xxl">当前药盒状态：</text>
+      <text class="text-{{showLoading?'blue':'red'}} text-xxl">{{showLoading?'未连接':'已连接'}}</text>
       </view>
     </view>
- </view>
-
- <view class="cu-timeline">
-  <view class="cu-time">药仓：{{number}}</view>
-  <view class="cu-item cur cuIcon-noticefill">
-    <view class="content bg-green shadow-blur">
-    <!--<text>22:22</text> 【广州市】快件已到达地球-->
-    <text class="text-white text-xxl">当前药盒状态：</text>
-    <text class="text-{{showLoading?'blue':'red'}} text-xxl">{{showLoading?'未连接':'已连接'}}</text>
-    </view>
-  </view>
-  <view class="cu-item text-red cuIcon-attentionforbidfill">
-    <view class="content bg-grey shadow-blur">
-     <text class="text-white text-xxl"> 药物名称：{{plan.name}}
-     </text>
-    </view>
-  </view>
-  <view class="cu-item text-blue cuIcon-evaluate_fill">
-    <view class=" content bg-cyan shadow-blur">
-    <text class="text-white text-xxl">药物数量：≥{{amount}}
-    </text>
-    </view>
-  </view>
-</view>
-
-<view class="cu-modal {{success?'show':''}}">
-  <view class="cu-dialog">
-    <view class="cu-bar bg-white justify-end">
-      <view class="content">提示信息</view>
-      <!--
-      <view class="action" bindtap="backToPlansIndex">
-        <text class="cuIcon-close text-red"></text>
-      </view>-->
-    </view>
-    <view class="cu-list menu ">
-    <view class="cu-item">
-      <view class="content">
-        <text class="text-red text-xl">恭喜，成功存药</text>
-        <!-- <text class="text-red text-xl">{{toolPlan.name}}</text> -->
+    <view class="cu-item text-red cuIcon-attentionforbidfill">
+      <view class="content bg-grey shadow-blur">
+      <text class="text-white text-xxl"> 药物名称：{{plan.name}}
+      </text>
       </view>
     </view>
-    </view>
-    <view class="cu-bar bg-white justify-end">
-      <view class="action">
-        <button class="cu-btn line-green text-green" bindtap="backToConditions">确定</button>
+    <view class="cu-item text-blue cuIcon-evaluate_fill">
+      <view class=" content bg-cyan shadow-blur">
+      <text class="text-white text-xxl">药物数量：≥{{amount}}
+      </text>
       </view>
     </view>
   </view>
-</view>
 
-<view class="padding flex flex-direction">
-  <button class="cu-btn bg-red margin-tb-sm lg" bindtap="voiceHelp">语音辅助存药</button>
-</view>
+  <view class="cu-modal {{success?'show':''}}">
+    <view class="cu-dialog">
+      <view class="cu-bar bg-white justify-end">
+        <view class="content">提示信息</view>
+        <!--
+        <view class="action" bindtap="backToPlansIndex">
+          <text class="cuIcon-close text-red"></text>
+        </view>-->
+      </view>
+      <view class="cu-list menu ">
+      <view class="cu-item">
+        <view class="content">
+          <text class="text-red text-xl">恭喜，成功存药</text>
+          <!-- <text class="text-red text-xl">{{toolPlan.name}}</text> -->
+        </view>
+      </view>
+      </view>
+      <view class="cu-bar bg-white justify-end">
+        <view class="action">
+          <button class="cu-btn line-green text-green" bindtap="backToConditions">确定</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="padding flex flex-direction">
+    <button class="cu-btn bg-red margin-tb-sm lg" bindtap="voiceHelp">语音辅助存药</button>
+  </view>
 
 
-<view class="padding flex flex-direction">
-  <button class="cu-btn bg-red margin-tb-sm lg" bindtap="manual">存药完毕请按此按钮返回</button>
+  <view class="padding flex flex-direction">
+    <button class="cu-btn bg-red margin-tb-sm lg" bindtap="manual">存药完毕请按此按钮返回</button>
+  </view>
+
+  <!--语音辅助存药模态窗口-->
+  <view class="cu-modal {{voiceStart?'show':''}}">
+    <view class="cu-dialog">
+      <view class="cu-bar bg-white justify-end">
+        <view class="content">辅助存药</view>
+        <!--
+        <view class="action" bindtap="backToPlansIndex">
+          <text class="cuIcon-close text-red"></text>
+        </view>-->
+      </view>
+      <view class="cu-list menu ">
+      <view class="cu-item">
+        <view class="content">
+          <text class="text-red text-xl">请确认服用的药物是：{{plan.name}}</text>
+          <!-- <text class="text-red text-xl">{{toolPlan.name}}</text> -->
+        </view>
+      </view>
+      </view>
+      <view class="cu-bar bg-white justify-end">
+        <view class="action">
+          <button class="cu-btn line-green text-green" bindtap="playHelpGif">确定</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</block>
+
+<block wx:if="{{playHelpGif}}">
+<view class="cu-bar bg-white solid-bottom">
+  <view class='action'>
+    <text class='cuIcon-titles text-orange '></text>将药物放到存药口
+  </view>
 </view>
+<view class="cu-card case">
+  <view class="cu-item shadow">
+    <view class="image">
+      <image src="/images/healthy.jpg" mode="widthFix"></image>
+      <view class="cu-tag bg-blue">教程</view>
+      <view class="cu-bar bg-shadeBottom">
+        <text class="text-cut">请按照图片指示存药</text>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="cu-bar bg-white solid-bottom">
+  <view class='action'>
+    <text class='cuIcon-titles text-red '></text> 点击存药按钮
+  </view>
+</view>
+<view class="cu-card case">
+  <view class="cu-item shadow">
+    <view class="image">
+      <image src="/images/healthy.jpg" mode="widthFix"></image>
+      <view class="cu-tag bg-blue">教程</view>
+      <view class="cu-bar bg-shadeBottom">
+        <text class="text-cut">请按照图片指示存药</text>
+      </view>
+    </view>
+  </view>
+</view>
+ <view class="padding flex flex-direction">
+    <button class="cu-btn bg-red margin-tb-sm lg" bindtap="manual">存药完毕请按此按钮返回</button>
+  </view>
+</block>
