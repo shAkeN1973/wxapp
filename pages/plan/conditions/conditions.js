@@ -231,7 +231,6 @@ Page({
     todayDate.day = parseInt(today.substring(7, 9));
     todayDate.hour = parseInt(today.substring(11, 13));
     todayDate.minute = parseInt(today.substring(14, 17));
-    // console.log(todayDate);
     return todayDate;
   },
 

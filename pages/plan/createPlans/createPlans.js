@@ -2,7 +2,7 @@
 
 const app = getApp()
 import mqtt from '../../../library/mqtt.js';
-
+var util = require('../../../utils/util.js');
 var number=null;
 var temp=null;
 var numberTime=null;
@@ -198,50 +198,50 @@ dateCaculator(plans,upLoadPlans)   //计算日期数组
   var day=parseInt(plans.date.substring(8,10));
   var dateMax=null;
   if(month==2)
-{
-    if(year%4==0&&year%100!=0)
-        dateMax=29;
-    else
-        dateMax=20;
-}
-else if(month>6&&month%2==0||month<7&&month%2!==0)
-{
-    dateMax=31;
-}
-else{
-    dateMax=30;
-}
-for(var i=0;i<plans.lengthOfTime;i++)
-{
-    var string=new String();
-    string=year.toString()+"-"+month.toString()+"-"+day.toString();
-    upLoadPlans.dateArray.push(string);
-  day = day + parseInt(plans.interval);
-   if (day >= dateMax) {
-    day = day % dateMax;
-    month++;
-     console.log(day);
+  {
+      if(year%4==0&&year%100!=0)
+          dateMax=29;
+      else
+          dateMax=20;
   }
-    console.log(string);
-}
+  else if(month>6&&month%2==0||month<7&&month%2!==0)
+  {
+      dateMax=31;
+  }
+  else{
+      dateMax=30;
+  }
+  for(var i=0;i<plans.lengthOfTime;i++)
+  {
+      var string=new String();
+      string=year.toString()+"-"+month.toString()+"-"+day.toString();
+      upLoadPlans.dateArray.push(string);
+    day = day + parseInt(plans.interval);
+    if (day >= dateMax) {
+      day = day % dateMax;
+      month++;
+      console.log(day);
+    }
+      console.log(string);
+  }
 },
 
 
 upLoad(upLoadPlans){
-  var newJson = JSON.stringify(upLoadPlans); //数组转json字符串
+    // var newJson = JSON.stringify(upLoadPlans); //数组转json字符串
+    var newJson=upLoadPlans.number.toString()+"N"+upLoadPlans.name.toString()+"T"+this.timeArry()+"A";
     var that = this;
     that.data.client = app.globalData.client;
     that.data.client.on('connect', e => {
       console.log("药物上传连接成功");
-      that.data.client.subscribe('presence', function (err) {
+      that.data.client.subscribe('SW_LED', function (err) {
         if (!err) {
-          that.data.client.publish('presence', newJson)
+          that.data.client.publish('SW_LED', newJson)
         }
       })
     });
     that.data.client.on('message', function (topic, message) {
       console.log(message.toString(),"这是接受到的信息，接下来将关闭mqtt连接");
-      // that.data.client.end();
   })
  
 },
@@ -326,30 +326,6 @@ refresh(plans){     //plans 按值传递
     this.upLoad(upLoadPlans);
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-    
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-    
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
   onUnload: function () {
    if(this.data.isSubmit)
    {
@@ -362,24 +338,90 @@ refresh(plans){     //plans 按值传递
    }
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
+  
+  timeArry:function(){         //计算数组发送  
+    // console.log(timeCaluToday(today),upLoadPlans.dateArray[0],timeCaluPlan(upLoadPlans.dateArray[0]));
+    var today=timeCaluToday(util.formatTime(new Date())) //获得今天的日期
+    var day=timeCaluPlan(upLoadPlans)    //获取plan中的日期数组
+    var timerUse=timeCaluPlanTimer(upLoadPlans.timer)
     
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
+    var result=timeDiff(today.day,day[0],today.hour,timerUse[0].hour,today.min,timerUse[0].minute,1);
+    var upLoadTimeString=result.hour.toString()+":"+result.minute.toString()+","
     
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-    
+    for(let i=0;i<day.length;i++){
+      for(let j=0;j<timerUse.length;j++){
+        if(i==0&&j==0){
+          continue;
+        }
+        else if(j==0){
+          result=timeDiff(day[i-1],day[i],timerUse[timerUse.length-1].hour,timerUse[0].hour,timerUse[timerUse.length-1].minute,timerUse[0].minute,1);
+          upLoadTimeString=upLoadTimeString+result.hour.toString()+":"+result.minute.toString()+",";
+        }
+        else{
+          result=timeDiff(null,null,timerUse[j-1].hour,timerUse[j].hour,timerUse[j-1].minute,timerUse[j].minute,0)
+          upLoadTimeString=upLoadTimeString+result.hour.toString()+":"+result.minute.toString()+",";
+        }
+      }
+    }
+    upLoadTimeString=upLoadTimeString.substring(0,upLoadTimeString.length-1);
+    console.log(upLoadTimeString);
+    return upLoadTimeString;
   }
+
 })
+
+function timeCaluToday(today){   //分割今天的时间和数组
+  var day=parseInt(today.substring(8,10));
+  var hour=parseInt(today.substring(11,13));
+  var min=parseInt(today.substring(14,16));
+  var todayDHM={
+    day:day,
+    hour:hour,
+    min:min
+  }
+  return todayDHM;
+}
+
+function timeCaluPlan(plans){
+  var day=[];
+  try {
+    for(let i=0;i<plans.dateArray.length;i++){
+      day[i]=parseInt(plans.dateArray[i].substring(7,9));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return day
+}
+
+function timeCaluPlanTimer(timer){
+  var timerSperet=[]
+  try {
+    for(let i=0;i<timer.length;i++){
+      var toolTimeSruct={
+        hour:parseInt(timer[i].substring(0,2)),
+        minute:parseInt(timer[i].substring(3,5))
+      }
+      timerSperet.push(toolTimeSruct);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return timerSperet
+}
+
+function timeDiff(Aday,Bday,Ahour,Bhour,Amin,Bmin,type){      //计算时间差
+  var result={
+    hour:null,
+    minute:null
+  }
+  if(type==1){    //计算天之间的时间差
+    result.hour=parseInt((((Bday-Aday)*24+Bhour-Ahour)*60+(Bmin-Amin))/60)
+    result.minute=(((Bday-Aday)*24+Bhour-Ahour)*60+(Bmin-Amin))%60
+  }
+  else{
+    result.hour=parseInt(((Bhour-Ahour)*60+(Bmin-Amin))/60)
+    result.minute=((Bhour-Ahour)*60+(Bmin-Amin))%60
+  }
+  return result;
+}
