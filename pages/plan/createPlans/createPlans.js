@@ -240,6 +240,7 @@ upLoad(upLoadPlans){
         }
       })
     });
+    that.data.client.publish('time',currentTime());//向对面发送现在的时间
     that.data.client.on('message', function (topic, message) {
       console.log(message.toString(),"这是接受到的信息，接下来将关闭mqtt连接");
   })
@@ -424,4 +425,12 @@ function timeDiff(Aday,Bday,Ahour,Bhour,Amin,Bmin,type){      //计算时间差
     result.minute=((Bhour-Ahour)*60+(Bmin-Amin))%60
   }
   return result;
+}
+
+function currentTime(){
+  var todaySent=timeCaluToday(util.formatTime(new Date())) //获得今天的日期
+  var stringSend='Y2020'+'M8'+'D'+todaySent.day.toString()+'H'+todaySent.hour.toString()+"M"+todaySent.min.toString();
+  console.log(stringSend);
+  return stringSend;
+  
 }

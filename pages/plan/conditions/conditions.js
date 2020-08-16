@@ -19,7 +19,7 @@ Page({
     persent2:0,
     timer:[],
     toolArray:[],
-    show:false,
+    showDrugTime:false,
     showLoading:true,
     showAll:false,
     showSaveHelp:false
@@ -66,14 +66,14 @@ Page({
       console.log("success",this.data.timer)
     }
     this.setData({
-      show:true
+      showDrugTime:true
     })
   },
 
 
   hideModal:function(){           //隐藏服药时间模态窗口
     this.setData({
-      show: false
+      showDrugTime: false
     })
   },
 
@@ -234,68 +234,6 @@ Page({
     return todayDate;
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-    
-  },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-    
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-    
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-    
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-    
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-    
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-    
-  }
 })
 
-// function date(today){
-//   var todayDate={
-//     year:null,
-//     month:null,
-//     day:null,
-//     hour:null,
-//     minute:null
-//   }
-//    todayDate.year = parseInt(today.substring(0, 4));
-//    todayDate.month= parseInt(today.substring(5, 7));
-//    todayDate.day= parseInt(today.substring(8, 10));
-//   todayDate.hour = parseInt(today.substring(12, 14));
-//   todayDate.minute = parseInt(today.substring(15, 17));
-//   return todayDate;
-// }

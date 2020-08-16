@@ -15,7 +15,7 @@ Page({
     console.log(today,typeof(today));
     var that=this;
     var toolArray = new Array();                           //将渲染数组进行动态显示
-    for(let i=0;i<8;i++)
+    for(let i=0;i<8;i++) 
     {
       if (numberArray[i] =="Occupied")
       {
