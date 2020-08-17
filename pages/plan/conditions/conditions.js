@@ -4,7 +4,7 @@
 
 
 const app = getApp();
-import mqtt, { PassThrough } from '../../../library/mqtt.js';
+import mqtt from '../../../library/mqtt.js';
 var util = require('../../../utils/util.js');
 
 Page({
@@ -28,7 +28,11 @@ Page({
     showDrugTime:false,
     showLoading:true,
     showAll:false,
-    showSaveHelp:false
+    showSaveHelp:false,
+    feedbacktimeList:null,
+    saveOK:false,
+    err:'不正常',
+    Nerr:'正常'
   },
   
 
@@ -53,24 +57,41 @@ Page({
 
 
   detail:function(e){         //显示当天的服药时间
-    console.log(e);
-    var obj=this.data.toolArray;
-    // console.log(obj)
-    for(let i=0;i<obj.length;i++){
-      if (obj[i].date == e.currentTarget.id)
-      {
-        this.setData({
-          timer:obj[i].timer
-        })
-        break;
-      }
+    var obj=this.data.dateArray;
+    if(!this.data.feedbacktimeList){
+      var cacheList=wx.getStorageSync('timeList'+this.data.number.toString())
+      this.setData({
+        feedbacktimeList:cacheList
+      })
     }
-    if(this.data.timer.length==0){
-      console.log("error");
+    if(!this.data.timerToShow){
+      this.setData({
+        str:'还未开始服药，请在服药后查看服药时间！'
+      })
     }
     else{
-      console.log("success",this.data.timer)
+      for(let i=0;i<obj.length;i++){
+        if (obj[i] == e.currentTarget.id)
+        {
+          var list=[]
+          for(let j=1;j<this.data.timer.length+1;j++){
+            list.push(this.data.feedbacktimeList[i][j])
+          }
+          if(list[0].time){
+          this.setData({
+            timerToShow:list,
+            saveOK:true
+          })}
+          else{
+            this.setData({
+              str:'还未开始服药，请在服药后查看服药时间！'
+            })
+          }
+          break;
+        }
+      }
     }
+    console.log(this.data.timerToShow)
     this.setData({
       showDrugTime:true
     })
@@ -199,20 +220,18 @@ Page({
       var abc=exp2.exec(message.toString());
       console.log(abc)
 
-      if(/*exp2.test(message.toString())&&*/topic=='Fankui1'){
-
+      if(abc&&topic=='Fankui1'){
         // console.log('fuck',abc)
         var eatDrugTime=abc[0];  //eatdrugTime从本地发送过来的服药时间
         var diffResult=ifFeedBackOK(spereteTimerHourMinute(eatDrugTime),that.data.timer) //比较发送的时间和page中的timer确定时间段
         if(diffResult){       //如果当前时间比对成功 
           var currentTimeList=wx.getStorageSync('timeList'+that.data.number.toString());
           if(!currentTimeList){                        //若无此缓存则进行缓存的设置
-            console.log('asasasasa')
             currentTimeList=setCache(that.data.timer,that.data.dateArray,that.data.number);
           }
           for(let i=0;i<currentTimeList.length;i++){        //则对缓存中的当前服药数组进行更改
             // console.log((that.date2(currentTimeList[i][0])).day)
-            if(that.data.toolDate.day==(that.date2(currentTimeList[i][0])).day){
+            if(that.data.todayDate.day==(that.date2(currentTimeList[i][0])).day){
               currentTimeList[i][diffResult.index+1].time=eatDrugTime;
               diffResult.TorF?currentTimeList[i][diffResult.index+1].inTime=true:currentTimeList[i][diffResult.index+1].inTime=false;
               var showList=[]
@@ -224,13 +243,15 @@ Page({
             }
           }
           that.setData({
-            timerToShow:showList
+            timerToShow:showList,
+            feedbacktimeList:currentTimeList
           })
         }
         else{
           console.log('--------------！！！反馈时间错误！！！-------------')
         }
       }
+      //that.data.client.end();//结束监听！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
       })
 
 
@@ -345,8 +366,17 @@ function spereteTimerHourMinute(time) {
 function timeDiff(timeSetting,timeAccept) {
   return ((timeSetting.hour-timeAccept.hour)*60+(timeSetting.minute-timeAccept.minute))
 }
-
-
+/*
+函数：
+  setCache()
+作用：
+  设定缓存，键值为timeList+number，为二维数组，分别储存每天的当前服药时间
+逻辑：
+  将所有值均设为time:null,inTime:false
+参数：
+  timer-----------------------设定的时间数组   数 组
+  dateArray-------------------设定的日期数组   数 组
+  */
 function setCache(timer,dateArray,number){
   var cacheArray=[];
   for(let i=0;i<dateArray.length;i++){

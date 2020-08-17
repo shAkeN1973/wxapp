@@ -51,7 +51,7 @@
 </scroll-view>
 
 <!--模态窗口-->
-<view class="cu-modal {{show?'show':''}}">
+<view class="cu-modal {{showDrugTime?'show':''}}">
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
       <view class="content">服药时间</view>
@@ -59,9 +59,19 @@
         <text class="cuIcon-close text-red"></text>
       </view>
     </view>
+    <block wx:if="{{saveOK}}">
     <view class="padding-xl" wx:for="{{timer}}" wx:for-item="item" wx:key="a">
-     {{timer[index]}}
+    设定时间：{{timer[index]}} 实际服药时间：{{timerToShow[index].time?timerToShow[index].time:str}} 
+    <text wx:if="{{timerToShow[index].time}}" class="text-{{timerToShow[index].inTime?'green':'red'}}">
+    {{timerToShow[index].inTime?Nerr:err}}
+    </text>
     </view>
+    </block>
+    <block wx:if="{{!saveOK}}">
+      <view class="padding-xl">
+        <text class="text-red">{{str}}</text>
+      </view>
+    </block>
     <view class="cu-bar bg-white justify-end">
       <view class="action">
         <button class="cu-btn line-green text-green" bindtap="hideModal">确定</button>
