@@ -66,12 +66,11 @@ Page({
         feedbacktimeList:cacheList
       })
     }
-   /* if(!this.data.timerToShow){
+
       this.setData({
         str:'还未开始服药，请在服药后查看服药时间！'
       })
-    }
-    else{*/
+   
       for(let i=0;i<obj.length;i++){
         if (obj[i] == e.currentTarget.id&&(this.date2(e.currentTarget.id)).day==this.data.todayDate.day)
         {
@@ -87,7 +86,6 @@ Page({
           })}
           else{
             this.setData({
-              saveOK:false,
               str:'还未开始服药，请在服药后查看服药时间！',
             })
           }
