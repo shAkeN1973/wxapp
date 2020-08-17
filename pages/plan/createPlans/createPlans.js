@@ -427,9 +427,9 @@ function timeDiff(Aday,Bday,Ahour,Bhour,Amin,Bmin,type){      //计算时间差
   return result;
 }
 
-function currentTime(){
+function currentTime(){        //获得今天的日期，并进行字符串的拼接
   var todaySent=timeCaluToday(util.formatTime(new Date())) //获得今天的日期
-  var stringSend='Y2020'+'M8'+'D'+todaySent.day.toString()+'H'+todaySent.hour.toString()+"M"+todaySent.min.toString();
+  var stringSend=' Wed'+' Aug'+' '+todaySent.day.toString()+' '+todaySent.hour.toString()+":"+todaySent.min.toString()+":"+(Math.floor(Math.random()*60)).toString()+" 2020";
   console.log(stringSend);
   return stringSend;
   
