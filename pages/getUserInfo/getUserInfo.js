@@ -46,10 +46,9 @@ Page({
         }
       })
     }
-    this.setData({
-      formArray:makeForm()
-    })
   },
+
+
   getUserInfo: function (e) {
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo
@@ -58,40 +57,27 @@ Page({
       hasUserInfo: true
     })
   },
-  testName: function (testValue) {
-    testValue = "test";
-    console.log(this.testValue);
-    console.log(testValue);
-    this.setData(
-      { time: 20 });
-    wx.navigateTo({
-      url: '../getUserInfo/getUserInfo',
-    })
-  },
 
-  mqttTry:function(){
-    var that = this;
-    that.data.client = app.globalData.client;
-    that.data.client.on('connect', e => {
-      console.log("ok");
-      that.data.client.subscribe('userShAkeN/plans/阿莫西林/save', function (err) {
-        if (!err) {
-            console.log("here")
-            that.data.client.on('message', function (topic, message) {
-            console.log(message.toString());
-            that.data.client.end();
-          })
-        }
-      },)
-    });
-  }
 })
 
-function makeForm() {
-  var formArray=new Array();
-  formArray.push('name');
-  for(let i=1;i<=3;i++){
-    formArray.push(i%2==0?"":"2020/"+i.toString())
+
+function speretTime(date,time,mood) {          //分开时间返回整形数  
+  switch (mood) {
+    case "date":
+      return {
+        year :parseInt(dateArray.substring(0, 4)),
+        month : parseInt(dateArray.substring(5, 7)),
+        day : parseInt(dateArray.substring(8, 10)),
+      }
+      case "time":{
+        return {
+
+        }
+
+      }
+  
+    default:
+      break;
   }
-  return formArray;
+
 }
