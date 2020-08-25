@@ -7,11 +7,11 @@
       <text class="userinfo-nickname">{{userInfo.nickName}}</text>
     </block>
   </view>
-    <view class="text-xl">交大药盒
-      <text class="text-df">v2.0</text>
+    <view class="text-xxl">您好！
+      <text class="text-xl">{{userInfo.nickName}}</text>
     </view>
     <view class="margin-top-sm">
-      <text>By:shAkeN</text>
+      <text class="text-xxl text-white">以下是您今天的服药信息</text>
     </view>
     <image src="../../images/wave.gif" mode="scaleToFill" class="gif-wave"></image>
   </view>
@@ -44,6 +44,8 @@
   </view>
   <view class="bg-white padding">
     <view class="grid col-{{index+1}} margin-bottom text-center" wx:for="{{5}}" wx:key='a'>
-      <view class="{{index%2==0?'bg-cyan':'bg-blue'}} padding" wx:for="{{(index+1)*2}}" wx:key='a'>{{index+1}}</view>
+      <view class="{{index%2==0?'bg-cyan':'bg-blue'}} padding text-xl" wx:for="{{(index+1)*2}}" wx:key='a'>{{formArray[index]}}</view>
     </view>
   </view>
+
+

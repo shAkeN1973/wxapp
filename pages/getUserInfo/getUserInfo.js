@@ -10,7 +10,8 @@ Page({
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     time: (new Date()).toString(),
-    client:null
+    client:null,
+    formArray:null
   },
   //事件处理函数
   bindViewTap: function () {
@@ -45,6 +46,9 @@ Page({
         }
       })
     }
+    this.setData({
+      formArray:makeForm()
+    })
   },
   getUserInfo: function (e) {
     console.log(e)
@@ -82,3 +86,12 @@ Page({
     });
   }
 })
+
+function makeForm() {
+  var formArray=new Array();
+  formArray.push('name');
+  for(let i=1;i<=3;i++){
+    formArray.push(i%2==0?"":"2020/"+i.toString())
+  }
+  return formArray;
+}
