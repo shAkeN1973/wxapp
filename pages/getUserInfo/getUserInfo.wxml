@@ -36,6 +36,14 @@
 
 
 
-<view class="padding flex flex-direction">
-  <button class="cu-btn bg-red margin-tb-sm lg" bindtap="mqttTry">尝试进行交互操作</button>
-</view>
+  <view class="cu-bar bg-white margin-top solid-bottom">
+    <view class="action">
+      <text class="cuIcon-title text-blue"></text>等分列
+    </view>
+    <view class="action"></view>
+  </view>
+  <view class="bg-white padding">
+    <view class="grid col-{{index+1}} margin-bottom text-center" wx:for="{{5}}" wx:key='a'>
+      <view class="{{index%2==0?'bg-cyan':'bg-blue'}} padding" wx:for="{{(index+1)*2}}" wx:key='a'>{{index+1}}</view>
+    </view>
+  </view>

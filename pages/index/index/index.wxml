@@ -58,7 +58,7 @@
 <view class="cu-list menu card-menu margin-top listView">
     <view class="cu-item ">
       <view class="content">
-        <text class="cuIcon-circlefill text-pink text-xxl"></text>
+        <text class="cuIcon-wefill text-pink text-xxl"></text>
         <text class="text-black text-xxl">当前空闲药盒编号：</text>
         <text class="text-green text-xxl">{{freeRoom}}</text>
       </view>
