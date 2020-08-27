@@ -43,8 +43,8 @@
     <view class="action"></view>
   </view>
   <view class="bg-white padding">
-    <view class="grid col-{{index+1}} margin-bottom text-center" wx:for="{{5}}" wx:key='a'>
-      <view class="{{index%2==0?'bg-cyan':'bg-blue'}} padding text-xl" wx:for="{{(index+1)*2}}" wx:key='a'>{{formArray[index]}}</view>
+    <view class="grid col-3 margin-bottom text-center" wx:for="{{5}}" wx:key='a'>
+      <view class="{{index%2==0?'bg-cyan':'bg-blue'}} padding text-xl" wx:for="{{(index+1)*2}}" wx:key='a'>{{index+1}}</view>
     </view>
   </view>
 
