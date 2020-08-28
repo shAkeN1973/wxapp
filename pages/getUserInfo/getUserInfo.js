@@ -1,7 +1,13 @@
-//index.js
-//获取应用实例
+/* getUserInfo.js */
+/* show the user's info and today's plans */
+/* like this */
+/* time  | name        |  eat? |*/
+/* 12:00 | amoxicillin |  yes  |*/
+/*       | Penicillin  |  yes  |*/
+/* 13:00 | Gentamicin  |  no   |*/
 const app = getApp()
 import mqtt from '../../library/mqtt.js';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 var util = require('../../utils/util.js');
 
 Page({
@@ -26,7 +32,17 @@ Page({
     if(!involveTodayPlanArray){
       console.log("今天没药吃，歇了吧您内")
     }
-    console.log(involveTodayPlanArray)
+    var showArray=['time','name','eat?'];
+    var timeSortArray=getSortedTimeArray(involveTodayPlanArray);
+    for(let i=0;i<timeSortArray.length;i++){                      //将数组进行遍历并push进showArray中，最笨的方法
+      
+      for(let j=0;j<involveTodayPlanArray.length;j++){
+
+      }
+
+
+    }
+
     
 
     if (app.globalData.userInfo) {
@@ -117,7 +133,6 @@ function deletPlanNotInvolveToday(planArray,today){       //剔除掉那些包�
     var involeTodayPlanArray=new Array()
     for(let i=0;i<planArray.length;i++){
       for(let j=0;j<planArray[i].dateArray.length;j++){
-        console.log(speretTime(planArray[i].dateArray[j],null,"date"))
         if(today.day==speretTime(planArray[i].dateArray[j],null,"date").day){
           involeTodayPlanArray.push(planArray[i]);
           break;
@@ -129,4 +144,30 @@ function deletPlanNotInvolveToday(planArray,today){       //剔除掉那些包�
   }
   else
   return null;
+}
+
+
+function getSortedTimeArray(planArray) {     //返回排好序的时间数组
+  var timeArray=new Array();
+  for(let i=0;i<planArray.length;i++){
+    for(let j=0;j<planArray[i].timer.length;j++){
+      var time=speretTime(null,planArray[i].timer[j],"time");
+      timeArray.push(time.hour+time.minute);
+      time=null;
+    }
+  }
+  for(let i=0;i<timeArray.length;i++){            //冒泡排序
+      for(let j=timeArray.length-1;j>=i;j--){
+          if(timeArray[j]<timeArray[j-1]){
+              var tool=timeArray[j];
+              timeArray[j]=timeArray[j-1];
+              timeArray[j-1]=tool;
+          }
+      }
+  } 
+  for(let i=0;i<timeArray.length;i++){     //将时间还原成string
+    timeArray[i]=parseInt(timeArray[i]/60).toString()+":"+(timeArray[i]%60).toString();
+  }
+  tool=null;
+  return timeArray
 }
