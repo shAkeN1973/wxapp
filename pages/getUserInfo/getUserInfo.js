@@ -7,7 +7,6 @@
 /* 13:00 | Gentamicin  |  no   |*/
 const app = getApp()
 import mqtt from '../../library/mqtt.js';
-import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 var util = require('../../utils/util.js');
 
 Page({
@@ -15,6 +14,7 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    showArray:null
   },
 
 
@@ -29,22 +29,36 @@ Page({
   onLoad: function () {
     var today = speretTime(util.formatTime(new Date()),null,"today");  //获得今天的日期
     var involveTodayPlanArray=deletPlanNotInvolveToday(returnPlanArray(),today);//获得已经筛选过的日期数组
+    var showArray=['time','name','eat?'];
+    console.log(today,involveTodayPlanArray)
     if(!involveTodayPlanArray){
       console.log("今天没药吃，歇了吧您内")
     }
-    var showArray=['time','name','eat?'];
-    var timeSortArray=getSortedTimeArray(involveTodayPlanArray);
-    for(let i=0;i<timeSortArray.length;i++){                      //将数组进行遍历并push进showArray中，最笨的方法
-      
-      for(let j=0;j<involveTodayPlanArray.length;j++){
-
+    else{
+      var timeSortArray=getSortedTimeArray(involveTodayPlanArray);
+      console.log(timeSortArray);
+      if(timeSortArray){
+        for(let i=0;i<timeSortArray.length;i++){      //遍历时间数组
+          if(timeSortArray[i]==timeSortArray[i-1])
+          continue;
+          showArray.push(timeSortArray[i])
+          for(let j=0;j<involveTodayPlanArray.length;j++){
+            for(let k=0;k<involveTodayPlanArray[j].timer.length;k++){
+              if(involveTodayPlanArray[j].timer[k]==timeSortArray[i]){
+                showArray.push(involveTodayPlanArray[j].name);
+                showArray.push("ok");
+                showArray.push("");
+              }
+            }
+          }
+          showArray.pop();
+        }
       }
-
-
     }
-
-    
-
+    this.setData({
+      showArray:showArray
+    })
+    console.log(showArray);
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -166,7 +180,7 @@ function getSortedTimeArray(planArray) {     //返回排好序的时间数组
       }
   } 
   for(let i=0;i<timeArray.length;i++){     //将时间还原成string
-    timeArray[i]=parseInt(timeArray[i]/60).toString()+":"+(timeArray[i]%60).toString();
+    timeArray[i]=(timeArray[i]%60).toString()+":"+parseInt(timeArray[i]/60).toString()+"0";
   }
   tool=null;
   return timeArray
