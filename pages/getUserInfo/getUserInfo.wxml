@@ -38,13 +38,15 @@
 
   <view class="cu-bar bg-white margin-top solid-bottom">
     <view class="action">
-      <text class="cuIcon-title text-blue"></text>等分列
+      <text class="cuIcon-title text-blue"></text>今日服药信息
     </view>
     <view class="action"></view>
   </view>
   <view class="bg-white padding">
-    <view class="grid col-3 margin-bottom text-center" wx:for="{{5}}" wx:key='a'>
-      <view class="{{index%2==0?'bg-cyan':'bg-blue'}} padding text-xl" wx:for="{{(index+1)*2}}" wx:key='a'>{{showArray[index]}}</view>
+    <view class="grid col-3 margin-bottom text-center" >
+      <view class="bg-{{formColorArray[index]}} padding text-xl" wx:for="{{showArray}}" wx:key='a'>
+         <text class="text-{{showArray[index]=='未服药'?'red':'white'}}">{{showArray[index]}}</text> 
+      </view>
     </view>
   </view>
 

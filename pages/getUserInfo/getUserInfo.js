@@ -29,14 +29,12 @@ Page({
   onLoad: function () {
     var today = speretTime(util.formatTime(new Date()),null,"today");  //获得今天的日期
     var involveTodayPlanArray=deletPlanNotInvolveToday(returnPlanArray(),today);//获得已经筛选过的日期数组
-    var showArray=['time','name','eat?'];
-    console.log(today,involveTodayPlanArray)
+    var showArray=['时间','药名','是否服药'];
     if(!involveTodayPlanArray){
       console.log("今天没药吃，歇了吧您内")
     }
     else{
       var timeSortArray=getSortedTimeArray(involveTodayPlanArray);
-      console.log(timeSortArray);
       if(timeSortArray){
         for(let i=0;i<timeSortArray.length;i++){      //遍历时间数组
           if(timeSortArray[i]==timeSortArray[i-1])
@@ -46,7 +44,17 @@ Page({
             for(let k=0;k<involveTodayPlanArray[j].timer.length;k++){
               if(involveTodayPlanArray[j].timer[k]==timeSortArray[i]){
                 showArray.push(involveTodayPlanArray[j].name);
-                showArray.push("ok");
+                var time=speretTime(null,involveTodayPlanArray[j].timer[k],"time")
+                if(time){
+                  if(time.hour*60+time.minute>today.hour*60+today.minute){
+                    showArray.push("未服药");
+                  }
+                  else
+                  showArray.push("已服药")
+                }
+                else{
+                  showArray.push("error")
+                }
                 showArray.push("");
               }
             }
@@ -55,10 +63,11 @@ Page({
         }
       }
     }
+    
     this.setData({
-      showArray:showArray
+      showArray:showArray,
+      formColorArray:arrangeColour(showArray.length)
     })
-    console.log(showArray);
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -184,4 +193,16 @@ function getSortedTimeArray(planArray) {     //返回排好序的时间数组
   }
   tool=null;
   return timeArray
+}
+
+function arrangeColour(legenth){            // 表格颜色的确定
+  var formColorArray=new Array();
+  if(legenth){
+    for(let i=0;i<legenth;i++){
+      formColorArray.push(i%3==0?"cyan":"blue");
+    }
+    return formColorArray;
+  }
+  else
+  return null;
 }
