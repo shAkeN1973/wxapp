@@ -14,7 +14,8 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    showArray:null
+    showArray:null,
+    showNothing:false
   },
 
 
@@ -30,8 +31,11 @@ Page({
     var today = speretTime(util.formatTime(new Date()),null,"today");  //获得今天的日期
     var involveTodayPlanArray=deletPlanNotInvolveToday(returnPlanArray(),today);//获得已经筛选过的日期数组
     var showArray=['时间','药名','是否服药'];
-    if(!involveTodayPlanArray){
-      console.log("今天没药吃，歇了吧您内")
+    if(involveTodayPlanArray[0]==null){
+      console.log("今天没药吃，歇了吧您内");
+      this.setData({
+        showNothing:true
+      })
     }
     else{
       var timeSortArray=getSortedTimeArray(involveTodayPlanArray);
