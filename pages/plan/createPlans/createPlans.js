@@ -46,7 +46,8 @@ Page({
     date1:"2019-07-01",
     array:[],
     timeChanger:[],
-    numberArray:[]
+    numberArray:[],
+    changeTempVar:false
   },
 
   PickerChange(e) {
@@ -312,6 +313,16 @@ refresh(plans){     //plans 按值传递
       }
     })*/
   },
+
+  changeTemp:function(e){
+    console.log(e)
+    if(e.detail.value==true){
+      console.log(e.value)
+      this.setData({
+        changeTempVar:true
+      })
+    }
+    },
 
   SM: function () {
     upLoadPlans.name=plans.name;
