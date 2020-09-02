@@ -61,7 +61,6 @@ Page({
     console.log((this.date2(e.currentTarget.id)).day,this.data.todayDate.day)
     if(!this.data.feedbacktimeList){
       var cacheList=wx.getStorageSync('timeList'+this.data.number.toString())
-      console.log(cacheList);
       this.setData({
         feedbacktimeList:cacheList
       })
@@ -70,29 +69,27 @@ Page({
       this.setData({
         str:'还未开始服药，请在服药后查看服药时间！'
       })
-   
-      for(let i=0;i<obj.length;i++){
-        if (obj[i] == e.currentTarget.id&&(this.date2(e.currentTarget.id)).day==this.data.todayDate.day)
-        {
-          console.log('123')
-          var list=[]
-          for(let j=1;j<this.data.timer.length+1;j++){
-            list.push(this.data.feedbacktimeList[i][j])
-          }
-          if(list[0].time){
-          this.setData({
-            timerToShow:list,
-            saveOK:true
-          })}
-          else{
+      if(!this.data.feedbacktimeList instanceof Array)
+        for(let i=0;i<obj.length;i++){
+          if (obj[i] == e.currentTarget.id&&(this.date2(e.currentTarget.id)).day==this.data.todayDate.day)
+          {
+            var list=[]
+            for(let j=1;j<this.data.timer.length+1;j++){
+              list.push(this.data.feedbacktimeList[i][j])
+            }
+            if(list[0].time){
             this.setData({
-              str:'还未开始服药，请在服药后查看服药时间！',
-            })
+              timerToShow:list,
+              saveOK:true
+            })}
+            else{
+              this.setData({
+                str:'还未开始服药，请在服药后查看服药时间！',
+              })
+            }
+            break;
           }
-          break;
         }
-      }
-   // }
     console.log(this.data.timerToShow)
     this.setData({
       showDrugTime:true
