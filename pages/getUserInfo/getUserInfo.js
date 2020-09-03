@@ -67,6 +67,7 @@ Page({
         }
       }
     }
+    console.log(showArray)
     
     this.setData({
       showArray:showArray,
@@ -191,11 +192,26 @@ function getSortedTimeArray(planArray) {     //返回排好序的时间数组
               timeArray[j-1]=tool;
           }
       }
-  } 
+  }
+ 
   for(let i=0;i<timeArray.length;i++){     //将时间还原成string
-    timeArray[i]=(timeArray[i]%60).toString()+":"+parseInt(timeArray[i]/60).toString()+"0";
+    var hourString=parseInt(timeArray[i]%60);
+    var minuteString=parseInt(timeArray[i]/60);
+    if(hourString<10){
+      hourString="0"+hourString.toString()
+    }
+    if(minuteString<10){
+      minuteString="0"+minuteString.toString();
+    }
+    else if(minuteString==0){
+      minuteString="00"
+    }
+    timeArray[i]=hourString+":"+minuteString;
   }
   tool=null;
+  console.log(timeArray);
+  hourString=null;
+  minuteString=null;
   return timeArray
 }
 

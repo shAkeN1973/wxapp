@@ -184,7 +184,7 @@ Page({
       that.data.client.subscribe(this.subscribeTopicConnect(toolPlan.name),function(err){if(!err){console.log('存药主题订阅成功')}})
       that.data.client.on('message',function(topic,message){      //监听mqtt消息
         console.log(message.toString())
-        var exp=new RegExp('ok','g'); //设立正则表达式，匹配message中的ok字样
+        var exp=new RegExp('aaok','g'); //设立正则表达式，匹配message中的ok字样
         if(exp.test(message.toString())) 
         {
           //若有存药，则将等待标志去除

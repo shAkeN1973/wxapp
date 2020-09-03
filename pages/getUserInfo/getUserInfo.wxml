@@ -45,9 +45,9 @@
   </view>
   <block wx:if="{{!showNothing}}">
     <view class="bg-white padding">
-      <view class="grid col-3 margin-bottom text-center" >
-        <view class="bg-{{formColorArray[index]}} padding text-xl" wx:for="{{showArray}}" wx:key='a'>
-          <text class="text-{{showArray[index]=='未服药'?'red':'white'}}">{{showArray[index]}}</text> 
+      <view class="grid col-3 margin-bottom text-center  light radius" >
+        <view class="bg-{{formColorArray[index]}} padding text-xl light radius" wx:for="{{showArray}}" wx:key='a'>
+          <text class="text-{{showArray[index]=='未服药'?'red':'grey'}} text-bold">{{showArray[index]}}</text> 
         </view>
       </view>
     </view>
