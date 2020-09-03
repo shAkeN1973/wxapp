@@ -2,7 +2,8 @@
 //获取应用实例
 const app = getApp()
 import mqtt from '../../../library/mqtt.js';
-
+var plugin = requirePlugin("WechatSI")
+let manager = plugin.getRecordRecognitionManager()
 
 
 Page({

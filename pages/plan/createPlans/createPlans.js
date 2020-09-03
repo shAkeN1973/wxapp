@@ -9,6 +9,8 @@ var numberTime=null;
 var tempTime=null;
 var upLoadArray=new Array();
 var full=true;
+var plugin = requirePlugin("WechatSI")
+let manager = plugin.getRecordRecognitionManager()
 
 
 var plans= {
@@ -47,7 +49,45 @@ Page({
     array:[],
     timeChanger:[],
     numberArray:[],
-    changeTempVar:false
+    changeTempVar:false,
+    MName:null
+  },
+
+  recordStart(){
+    console.log('start record')
+    manager.start({
+      lang:"zh_CN"
+    })
+  },
+  
+  recordEnd(){
+    console.log('end record')
+    manager.stop()
+  },
+
+  initRecord(){
+    manager.onStart=(res)=>{
+      console.log("成功开始录音识别", res)
+    }
+    manager.onRecognize=(res)=>{
+      let text=res.result;
+      text=text.substring(0,text.length-1);
+      console.log(text);
+      this.setData({
+        MName:text
+      })
+    }
+    manager.onStop=(res)=>{
+      let text=res.result;
+      text=text.substring(0,text.length-1);
+      console.log(text);
+      this.setData({
+        MName:text
+      })
+      if(text==''){
+        console.log("no record is recognized")
+      }
+    }
   },
 
   PickerChange(e) {
@@ -282,6 +322,7 @@ refresh(plans){     //plans 按值传递
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.initRecord();
     //var N=this.getOpenerEventChannel()
     this.getStorageSlef();
     
@@ -325,7 +366,12 @@ refresh(plans){     //plans 按值传递
     },
 
   SM: function () {
+    if(!plans.name){
+      upLoadPlans.name=this.data.MName;
+    }
+    else{
     upLoadPlans.name=plans.name;
+    }
     upLoadPlans.drugsInOneDay=plans.drugsInOneDay;
     upLoadPlans.afterOrBefore=plans.afterOrBefore;
     upLoadPlans.timer=plans.timer;

@@ -10,9 +10,12 @@
 </view>
 <view wx:if="{{index!= null}}">
   <block wx:for="{{allChanger}}" wx:key="symbolDate" wx:for-item="item"> -->
-	<view class="cu-form-group">
+	<view class="cu-form-group ">
 		<view class="title">药物</view>
-		<input placeholder="药名" bindinput="Submit" id="drugName"></input>
+	
+		<input placeholder="{{MName?MName:'药名'}}" bindinput="Submit" id="drugName"></input>
+			<button class="cu-btn icon" bindtouchstart="recordStart" bindtouchend="recordEnd">
+		<text class="cuIcon-voice lg text-black "></text></button>
 	</view>
 	<view class="cu-form-group">
 		<view class="title">每天顿数</view>
@@ -33,7 +36,7 @@
     <view class="cu-form-group">
 		  <view class="title">日期选择
 		  </view>
-		  <picker mode="date" value="{{date1}}" start="2015-09-01" end="2020-09-01" bindchange="DateChange">
+		  <picker mode="date" value="{{date1}}" start="2020-09-01" end="2025-09-01" bindchange="DateChange">
         	<view class="picker">
 				{{date1}}
 			</view>
