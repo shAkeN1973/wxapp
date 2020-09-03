@@ -24,6 +24,13 @@ Page({
     freeRoom:'',
     connectConfirm:false
   },
+  speak:function(){
+    playVoice("请存一号药");
+    setTimeout(function(){
+      playVoice("特拉唑嗪")
+    },2000)
+    
+  },
 
 
 
@@ -322,4 +329,28 @@ function randomString(len) {
 
 function log(){
   console.log("ok");
+}
+
+function playVoice(text){
+  plugin.textToSpeech({
+    lang: "zh_CN",
+    tts: true,
+    content: text,
+    success: function(res) {
+        console.log("succ tts", res.filename);
+        const innerAudioContext = wx.createInnerAudioContext();
+        innerAudioContext.autoplay = true
+        innerAudioContext.src = res.filename.toString()
+          innerAudioContext.onPlay(() => {
+            console.log('开始播放')
+          })
+          innerAudioContext.onError((res) => {
+            console.log(res.errMsg)
+            console.log(res.errCode)
+          })
+    },
+    fail: function(res) {
+        console.log("fail tts", res)
+    }
+})
 }
