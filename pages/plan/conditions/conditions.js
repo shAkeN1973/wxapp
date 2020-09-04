@@ -58,13 +58,13 @@ Page({
 
   detail:function(e){         //显示当天的服药时间
     var obj=this.data.dateArray;
-    console.log((this.date2(e.currentTarget.id)).day,this.data.todayDate.day)
     if(!this.data.feedbacktimeList){
       var cacheList=wx.getStorageSync('timeList'+this.data.number.toString())
       this.setData({
         feedbacktimeList:cacheList
       })
     }
+
 
       this.setData({
         str:'还未开始服药，请在服药后查看服药时间！'
@@ -92,6 +92,7 @@ Page({
         }
     console.log(this.data.timerToShow)
     this.setData({
+      saveOK:true,
       showDrugTime:true
     })
   },

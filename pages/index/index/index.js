@@ -24,14 +24,6 @@ Page({
     freeRoom:'',
     connectConfirm:false
   },
-  speak:function(){
-    playVoice("请存一号药");
-    setTimeout(function(){
-      playVoice("特拉唑嗪")
-    },2000)
-    
-  },
-
 
 
   drawCanvas:function(){  //进行画布的修改

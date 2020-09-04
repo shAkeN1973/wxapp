@@ -234,6 +234,10 @@ getStorageSlef:function(){         //只有在输入药物名称的时候才可�
 
 dateCaculator(plans,upLoadPlans)   //计算日期数组
 {
+  console.log('upLoadPlans',upLoadPlans);
+  if(upLoadPlans.dateArray[0]!=null){
+    upLoadPlans.dateArray=[]
+  }
   var year=parseInt(plans.date.substring(0,4));
   var month=parseInt(plans.date.substring(5,7));
   var day=parseInt(plans.date.substring(8,10));
@@ -322,6 +326,12 @@ refresh(plans){     //plans 按值传递
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    
+    if(upLoadPlans.timer[0]!=null&&plans.timer[0]!=null){
+      upLoadPlans.timer=[];
+      plans.timer=[]
+    }
+    console.log(upLoadPlans);
     this.initRecord();
     //var N=this.getOpenerEventChannel()
     this.getStorageSlef();
