@@ -45,7 +45,13 @@
         <text class="text-black text-xl">药仓状态：</text>
         <text class="text-green text-xl">正常</text>
       </view>
-    </view>
+     <view class="cu-item">
+      <view class="content">
+        <text class="text-black text-xl">药仓温度：</text>
+        <text class="text-blue text-xl">24.0°C</text>
+      </view>
+      </view>
+      </view>
     </view>
     <view class="cu-bar bg-white justify-end">
       <view class="action">
