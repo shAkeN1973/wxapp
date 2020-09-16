@@ -25,10 +25,10 @@
 	<block wx:for="{{array}}"wx:key="symbolTime" wx:for-item="item">
 		<view class="cu-form-group">
 		  <view class="title">设定时间</view>
-		  <picker mode="time" value="{{item.time}}" start="00:00" end="23:59" bindchange="TimeChange">
+		  <picker mode="time" value="{{item.time}}" start="00:00" end="23:59" bindchange="TimeChange" id="{{index}}">
         	<view class="picker">
-				{{item.time}}
-			  </view>
+						{{item.time}}
+					</view>
           </picker>
         </view>
 	</block>

@@ -64,8 +64,6 @@ Page({
         feedbacktimeList:cacheList
       })
     }
-
-
       this.setData({
         str:'还未开始服药，请在服药后查看服药时间！'
       })
@@ -107,31 +105,7 @@ Page({
 
 
   mqttConnet:function(e){       //进行mqtt的连接，此链接是获得当天的服药时间
-    // var that = this;
-    // that.data.client = app.globalData.client;
-    // that.data.client.on('connect', e => {
-    //   console.log("ok");
-    //   that.data.client.subscribe('ask', function (err) {
-    //     if (!err) {
-    //       console.log("here")
-    //       that.data.client.publish('ask', that.data.number.toString())
-    //     }
-    //   })
-    // });
-    // that.data.client.subscribe('ask'+that.data.number.toString(),function(err){
-    //   if(!err){
-    //     that.data.client.on('message',function(topic,message){
-    //       var obj=JSON.parse(message);
-    //       if(obj instanceof Array){
-    //         //write somthing
-    //         that.setData({
-    //           toolArray:obj
-    //         })
-    //         // console.log(obj,that.data.toolArray);
-    //       }
-    //     })
-    //   }
-    // })
+
   },
 
 
