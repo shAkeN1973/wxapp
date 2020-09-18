@@ -418,6 +418,7 @@ refresh(plans){     //plans 按值传递
   },
 
   onUnload: function () {
+   this.SM();
    if(this.data.isSubmit)
    {
      
