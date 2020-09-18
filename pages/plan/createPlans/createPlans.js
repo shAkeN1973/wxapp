@@ -14,7 +14,8 @@ const app = getApp();
 var util = require('../../../utils/util.js');
 // var upLoadArray=new Array();           //不确定哪里会用到，所以先注释了
 var plugin = requirePlugin("WechatSI")
-let manager = plugin.getRecordRecognitionManager()
+let manager = plugin.getRecordRecognitionManager();
+var storage=null;
 
 
 var plans= {
@@ -24,19 +25,19 @@ var plans= {
   lengthOfTime: null,    //服药时间长度
   frenquency: null,      //一天吃几次
   drugsInOneDay:null,     //一次吃多少
-  afterOrBefore: null,   //饭前饭后吃
+  // afterOrBefore: null,   //饭前饭后吃
   interval:null,      //服药间隔天数（若每天都吃则为null)
   };
 
 
-var upLoadPlans={   //上传数组
-  name:"",          //药物名称，可用于校验
-  number:null,      //对应的药盒编号
-  timer:[],        //每天的服药时间段
+var upLoadPlans={       //上传数组
+  name:"",              //药物名称，可用于校验
+  number:-1,          //对应的药盒编号,-1代表没有办法
+  timer:[],             //每天的服药时间段
   drugsInOneDay:null,   //每天吃多少
-  dateArray:[],        //日期数组，可能不会要但是得写上
-  afterOrBefore:null,  //饭前吃还是饭后吃
-  start:false
+  dateArray:[],         //日期数组，可能不会要但是得写上
+  // afterOrBefore:null,   //饭前吃还是饭后吃
+  start:false           //是否已经开始吃药
 };
 
 /**
@@ -97,8 +98,7 @@ Page({
     }
   },
   /** 选择一天能吃几顿药，并进行plan.timer的创建工作
-   * 日期              |操作        |操作者
-   * 2020/9/15 00:07  |进行代码重构  |shAkeN
+   * 2020/9/15 00:07
    *    -delet
    *      -numberTime
    *      -tempTime
@@ -226,6 +226,7 @@ getStorageSlef:function(){         //只有在输入药物名称的时候才可�
           break;
         }
       }
+      storage=res.data;
     }
   })
 },
@@ -321,10 +322,11 @@ refresh(plans){     //plans 按值传递
       upLoadPlans.timer=[];
       plans.timer=[]
     }
+    this.getStorageSlef();
     console.log(upLoadPlans);
     this.initRecord();
     //var N=this.getOpenerEventChannel()
-    this.getStorageSlef();
+    
     
     const eventChannel = this.getOpenerEventChannel()
     //console.log(eventChannel);  
@@ -349,16 +351,70 @@ refresh(plans){     //plans 按值传递
     upLoadPlans.name=plans.name;
     }
     upLoadPlans.drugsInOneDay=plans.drugsInOneDay;   //将输入的信息转移到上传的结构体中
-    upLoadPlans.afterOrBefore=plans.afterOrBefore;
+    // upLoadPlans.afterOrBefore=plans.afterOrBefore;
     // upLoadPlans.timer=plans.timer;
     this.dateCaculator(plans,upLoadPlans);        //计算日期并直接修改upLoadPlans中的dateArray
     upLoadPlans.timer=sortTimer(plans.timer);
     console.log(upLoadPlans);
-    wx.setStorage({
-        key: upLoadPlans.number.toString(),
-        data: upLoadPlans,
-      });
-    this.upLoad(upLoadPlans);
+    var errorMessage=testAllFilled(upLoadPlans);
+    console.log(errorMessage)
+    if(errorMessage){                           //校验message
+      wx.showModal({
+        title:'请填写完整',
+        content:(res=>{
+          var message="有以下信息未填写完整:";
+          for(let i=0;i<errorMessage.length;i++){
+            message=message+errorMessage[i]+' ';
+          }
+          return message
+        })(),
+        success(res){
+         if(res.confirm){
+           //do nothong,wait for next move
+         }
+         else if(res.cancel){  //点击取消并返回
+           storage[upLoadPlans.number-1]=null;
+           console.log('storage',storage);
+           wx.setStorage({
+             data: storage,
+             key: 'nmsl',
+           })
+           wx.navigateBack({
+             delta: 1,
+           })
+         }
+        }
+      })
+    }
+    else{
+      wx.setStorage({
+          key: upLoadPlans.number.toString(),
+          data: upLoadPlans,
+        });
+      this.upLoad(upLoadPlans);
+     wx.navigateBack({
+       delta: 1,
+     })
+    }
+    
+    // wx.showModal({
+    //   title: '提示',
+    //   content: '这是一个模态弹窗',
+    //   success (res) {
+    //     if (res.confirm) {
+    //     console.log('用户点击确定')
+    //   } 
+    //   else if (res.cancel) {
+    //     console.log('用户点击取消')
+    //   }
+    //   }
+    // })
+
+    // wx.showToast({
+    //   title: '成功',
+    //   icon:'success',
+    //   duration:2000
+    // })
   },
 
   onUnload: function () {
@@ -513,4 +569,23 @@ function sortTimer(timer){   //接受未排序的时间分钟和小时进行累�
 
   console.log("all done timer:",sortedTimer);
   return sortedTimer
+}
+
+/**
+ *  对填入的信息进行校验
+ * 
+ * */ 
+function testAllFilled(upLoadPlans){
+  var errorMessage=new Array()
+  for(var itemTest in upLoadPlans){
+    if(upLoadPlans[itemTest] instanceof Array && upLoadPlans[itemTest][0]==null){
+      errorMessage.push(itemTest);
+    }
+    else if(upLoadPlans[itemTest]==null)
+    errorMessage.push(itemTest);
+  }
+  if(errorMessage[0]==null)
+  return null;
+  else
+  return errorMessage;
 }

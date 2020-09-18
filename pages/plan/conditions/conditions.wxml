@@ -37,8 +37,8 @@
   </view>
 
   <view class="action">
-    <button class="cu-btn icon bg-white" bindtap="">
-    <text class="cuIcon-settings text-red"></text>
+    <button class="cu-btn icon bg-white" bindtap="deletePlan">
+    <text class="cuIcon-delete text-red"></text>
     </button>
   </view>
 </view>

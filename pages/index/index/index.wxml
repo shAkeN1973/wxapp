@@ -21,8 +21,10 @@
       <!-- last-child选择器-->
     </view>
   </view>
+<view class="center">
 <canvas canvas-id="tryCanvas" class="canvasTry"  bindtouchstart="start" bindtouchmove="move" bindtouchend="end"> 
 </canvas>
+</view>
 
 <!--模态窗口-->
 <view class="cu-modal {{show?'show':''}}">
@@ -61,6 +63,12 @@
   </view>
 </view>
 
+<!-- <canvas style="width: 400px; height: 500px;"
+ canvas-id="TEMPERATURE"
+ binderror="canvasIdErrorCallback">
+</canvas> -->
+
+
 <view class="cu-list menu card-menu margin-top listView">
     <view class="cu-item ">
       <view class="content">
@@ -77,5 +85,11 @@
       </view>
     </view>
  </view>
+<!-- <view class="action center">
+  <button class="cu-btn" bindtap="showModalAA">
+  <text class="text-grey cuIcon-scan">扫码绑定</text>
+  </button>
+</view>
 
 
+ -->

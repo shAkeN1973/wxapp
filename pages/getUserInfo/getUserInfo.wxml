@@ -24,7 +24,7 @@
     <view class="flex flex-sub flex-direction solid-right">
       <view class="text-xxl text-blue">{{starCount}}</view>
       <view class="margin-top-sm">
-        <text class="cuIcon-favorfill"></text>老人绑定</view>
+      <text class="cuIcon-scan"></text>扫码绑定</view>
     </view>
     <view class="flex flex-sub flex-direction">
       <view class="text-xxl text-green">{{forksCount}}</view>

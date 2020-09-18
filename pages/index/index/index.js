@@ -3,7 +3,9 @@
 const app = getApp()
 import mqtt from '../../../library/mqtt.js';
 var plugin = requirePlugin("WechatSI")
-let manager = plugin.getRecordRecognitionManager()
+let manager = plugin.getRecordRecognitionManager();
+var wxChart = require('./../../../utils/wxcharts.js');   //这里引入折线图组件
+
 
 
 Page({
@@ -38,8 +40,6 @@ Page({
     draw.setLineWidth(4);
     draw.setStrokeStyle('white')
     draw.setLineJoin('round');
-    // draw.lineTo(90 , 0);
-    // draw.stroke();
     draw.arc(0, 0, 90, Math.PI * 0.25*i+0.01,Math.PI*0.25*(i+1)-0.01);   //画圆
     if(numberArray[i]){
       draw.setFillStyle('orange');}
@@ -50,8 +50,6 @@ Page({
     draw.lineTo(0, 0);
     draw.closePath();           //闭合当前路径
     draw.stroke();
-    // draw.setTextAlign('center');
-    // draw.strokeText('hah')
     draw.fill();
     if((i+1)==1){
     draw.draw()}
@@ -91,7 +89,7 @@ Page({
     var x=e.touches[0].x-100;
     var y=e.touches[0].y-100;
     var pickNumber=0; //选取的数字
-    var angle =360 * Math.atan(y/x) / (2 * Math.PI);
+    var angle =360 * Math.atan(y/x) / (2 * Math.PI); //计算选取的角度
     if(angle>0&&angle<45)
     {
       if(x>0)
@@ -154,7 +152,6 @@ Page({
 
   getPlans(number){  //获得药仓所对应的服药计划
     var toolPlan = wx.getStorageSync(number.toString());
-    // console.log(toolPlan)
     this.setData({
       toolPlan:toolPlan
     })
@@ -220,10 +217,7 @@ Page({
       })
     }
   },
-
-
-
-
+  
   getUserInfo: function(e) {
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo
@@ -234,43 +228,10 @@ Page({
   },
   
 
-  ////验证网络请求，getUserInfo
 
 
-  //
-//   testName: function(testValue){
-//     testValue="test";
-//     console.log(this.testValue);
-//     console.log(testValue);
-//     this.setData(
-//       {time:20});
-//   wx.navigateTo({
-//       url: '../getUserInfo/getUserInfo',
-//     })
-// //old ends here
 
-//     var that = this;
-//     that.data.client=app.globalData.client;
-  
-//     that.data.client.on('connect',e=>{
-//       console.log("ok");
-//       that.data.client.subscribe('presence',function(err){
-//         if(!err)
-//         {
-//           that.data.client.publish('presence','my first mqtt connection')
-//         }
-//       })
-//     });
-//     that.data.client.on('message',function(topic,message){
-//       console.log(message.toString());
-//       that.data.client.end();
-      
-//     })
-  
-//   },
-
-
-scanCodeSelf(){
+scanCodeSelf(){   //扫码组件
   wx.scanCode({
     success:e=>{
       console.log(e);

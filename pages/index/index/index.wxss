@@ -24,9 +24,12 @@
   /*background-color:#8dc63f;*/
   height:200px;
   width:200px;
-  left: 60px;
+  display: flex;
+  justify-content: center;
+  /* left: 60px;
   right: 60px;
-  top:0px;
+  top:0px; */
+  margin:0 auto;
   border:1px solid white
 }
 
@@ -38,4 +41,10 @@ page{
   margin-top:40px;
   text-align: center;
   color: blueviolet;
+}
+
+.center{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

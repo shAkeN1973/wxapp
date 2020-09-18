@@ -6,7 +6,7 @@
 const app = getApp();
 import mqtt from '../../../library/mqtt.js';
 var util = require('../../../utils/util.js');
-
+var roomArrayStorage=wx.getStorageSync('nmsl')
 Page({
 
   /**
@@ -139,7 +139,6 @@ Page({
  */
   onLoad: function (options) {
     var toolPlan = wx.getStorageSync(options.number.toString());    //从缓存中获取药物数据
-    
     var today = util.formatTime(new Date());  //获得今天的日期
     var toolTodayDate=this.date1(today);        //分割今日的时间并返回 
     this.setData(                          //从plansIndex页面传过来的number
@@ -294,6 +293,43 @@ Page({
     return todayDate;
   },
 
+
+  deletePlan:function(){
+    var that=this;
+    console.log(roomArrayStorage);
+    wx.showModal({
+      title:'提示',
+      content:'确定删除此计划？',
+      success(res){
+        if(res.confirm){
+          roomArrayStorage[that.data.number-1]=null;
+          wx.setStorage({
+            key: 'nmsl',
+            data:roomArrayStorage,
+          })
+          wx.removeStorage({
+            key: that.data.number.toString(),
+          })
+          wx.showToast({
+            title: '缓存清除成功！',
+            icon:'success',
+            duration:3000,
+            success(res){
+              setTimeout(function(){    //设置延时，否则一闪而过
+                wx.navigateBack({
+                  delta: 1,
+                })
+              }, 4000);
+            }
+          })
+        }
+        else if(res.cancel){
+          //do nothing
+        }
+      }
+
+    })
+  }
 
 })
 /*
