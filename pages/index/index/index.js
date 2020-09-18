@@ -5,6 +5,7 @@ import mqtt from '../../../library/mqtt.js';
 var plugin = requirePlugin("WechatSI")
 let manager = plugin.getRecordRecognitionManager();
 var wxChart = require('./../../../utils/wxcharts.js');   //这里引入折线图组件
+var chart=null;
 
 
 
@@ -182,6 +183,7 @@ Page({
 
 
   onLoad: function () {
+    this.showTemperature();
     this.initialization();          //调用设置缓存函数，保证不用手动添加
     this.drawCanvas();              //调用画布函数
     if(app.globalData.client){
@@ -263,6 +265,50 @@ try{
 }catch(e){
     console.log(e);
   }
+},
+
+showTemperature:function(){
+  var windowWidth=300;
+  chart=new wxChart({
+    canvasId:'test',
+    type:'line',
+    categories:['1','2','3','4','5','6','7','8','9','10','11','12'],
+    animation: true,
+    //background: '#f5f5f5',
+    series:[{
+      name:'1号药仓温度',
+      data:[25,24,23,25,23,25,25,25,24,21,24,25],
+      format:function (val,name){
+        return val.toFixed(2)
+      }
+    },{
+      name:'2号药仓温度',
+      data:[24,24,23,23,23,22,23,25,24,25,24,22],
+      format:function (val,name){
+        return val.toFixed(2)
+      }
+    }
+    ],
+    xAxis:{
+      disableGrid:true
+    },
+    yAxis:{
+      title:'今天各药仓温度',
+      formate:function(val){
+        return val.toFixed(2);
+      },
+    max:30,
+    min:10
+    },
+    width:windowWidth,
+    height:200,
+    dataLabel:false,
+    dataPointShape:true,
+    extra:{
+      lineStyle:'curve'
+    }
+  })
+
 }
 })
 

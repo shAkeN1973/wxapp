@@ -48,3 +48,8 @@ page{
   flex-direction: column;
   justify-content: center;
 }
+
+.chartTry{
+  padding-bottom: 50px;
+  margin:0 auto;
+}
