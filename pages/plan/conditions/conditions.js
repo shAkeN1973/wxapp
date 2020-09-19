@@ -6,7 +6,6 @@
 const app = getApp();
 import mqtt from '../../../library/mqtt.js';
 var util = require('../../../utils/util.js');
-var roomArrayStorage=wx.getStorageSync('nmsl');
 var wxChart = require('./../../../utils/wxcharts.js');   //这里引入折线图组件
 
 
@@ -298,6 +297,7 @@ Page({
 
 
   deletePlan:function(){
+    var roomArrayStorage=wx.getStorageSync('nmsl');
     var that=this;
     console.log(roomArrayStorage);
     wx.showModal({

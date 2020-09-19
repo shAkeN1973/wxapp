@@ -1,13 +1,15 @@
   //进行服药计划的显示工作
 var util = require('../../../utils/util.js');
-var toolNumberArray=null;
+
 Page({
   data: {
     logs: [],
     renderingArray:[],
-    number:1
+    number:1,
+    toolNumberArray:[]
   },
   onLoad: function () {
+    var toolNumberArray=null;
     console.log(this.data.renderingArray);
     var numberArray=wx.getStorageSync('nmsl');//获得缓存中储存的数组元素
     toolNumberArray=numberArray;
@@ -16,6 +18,7 @@ Page({
     console.log(today,typeof(today));
     var that=this;
     var toolArray = new Array();                           //将渲染数组进行动态显示
+    // var toolPlan2=[],       //赋值渲染数组2
     for(let i=0;i<8;i++) 
     {
       if (numberArray[i] =="Occupied")
@@ -26,12 +29,17 @@ Page({
         anotherPlan.endDate=toolPlan.dateArray[toolPlan.dateArray.length-1];
         anotherPlan.number=i+1;
         toolArray.push(anotherPlan);
-        that.setData({
-          renderingArray: toolArray             
-        });
+
+      }
+      else if(numberArray[i] ==null){
+         toolArray.slice(i,1);
       }
   
     }
+    that.setData({
+      renderingArray: toolArray,
+      toolNumberArray:toolNumberArray       
+    });
     
 
 
@@ -87,7 +95,7 @@ Page({
 
   createNewPlan:function(){
     for(let i=0;i<8;i++){
-    if(toolNumberArray[i]==null){
+    if(this.data.toolNumberArray[i]==null){
     console.log("progress maked here");
       wx.navigateTo({
       url: "../createPlans/createPlans",  //跳转到创建服药计划页面进行数据通信
