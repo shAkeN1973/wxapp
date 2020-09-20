@@ -60,7 +60,7 @@
       </view>
     </view>
     <block wx:if="{{saveOK}}">
-    <view class="padding-xl" wx:for="{{timer}}" wx:for-item="item" wx:key="a" >
+    <view class="padding-xs" wx:for="{{timer}}" wx:for-item="item" wx:key="a" >
     <text align="left" decode="true" class="text-xxl text-grey">
     设定时间：{{timer[index]}}\n</text>
     <text class="text-xxl text-grey" decode="true">实际服药时间:</text>
