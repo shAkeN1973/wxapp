@@ -1,5 +1,6 @@
 //index.js
 //获取应用实例
+//这项目必能进国赛
 const app = getApp()
 import mqtt from '../../../library/mqtt.js';
 var plugin = requirePlugin("WechatSI")

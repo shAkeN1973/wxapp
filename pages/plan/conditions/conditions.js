@@ -60,6 +60,7 @@ Page({
 
   detail:function(e){         //显示当天的服药时间
     var obj=this.data.dateArray;
+    console.log(this.data.feedbacktimeList)
     if(!this.data.feedbacktimeList){
       var cacheList=wx.getStorageSync('timeList'+this.data.number.toString())
       this.setData({
@@ -69,7 +70,7 @@ Page({
       this.setData({
         str:'还未开始服药，请在服药后查看服药时间！'
       })
-      if(!this.data.feedbacktimeList instanceof Array)
+      if(this.data.feedbacktimeList instanceof Array)
         for(let i=0;i<obj.length;i++){
           if (obj[i] == e.currentTarget.id&&(this.date2(e.currentTarget.id)).day==this.data.todayDate.day)
           {
@@ -101,7 +102,7 @@ Page({
   hideModal:function(){           //隐藏服药时间模态窗口
     this.setData({
       showDrugTime: false,
-      timerToShow:null
+      // timerToShow:null        //点击隐藏模态框则会将所有缓存里的数据设置为null，因此在detail()中显示不出来
     })
   },
 
@@ -190,14 +191,14 @@ Page({
     else{                                      //已经存药，进行服药的反馈监视
       var that = this;
       that.data.client = app.globalData.client;
-      that.data.client.subscribe('admit',function(err){if(!err){console.log('反馈主题订阅成功')}})
+      that.data.client.subscribe('admitTest',function(err){if(!err){console.log('反馈主题订阅成功')}})
       that.data.client.on('message',function (topic,message) {
       var exp2=new RegExp('[0-9]{2}:[0-9]{2}:[0-9]{2}','g')
       // var testMessage=exp2.test(message.toString());
       var abc=exp2.exec(message.toString());
       console.log(abc,message.toString())
 
-      if(abc&&topic=='admit'){
+      if(abc&&topic=='admitTest'){
         // console.log('fuck',abc)
         var eatDrugTime=abc[0];  //eatdrugTime从本地发送过来的服药时间
         var diffResult=ifFeedBackOK(spereteTimerHourMinute(eatDrugTime),that.data.timer) //比较发送的时间和page中的timer确定时间段
@@ -408,7 +409,6 @@ function setCache(timer,dateArray,number){
     }
     cacheArray.push(list);
   }
-  console.log(cacheArray);
   wx.setStorageSync('timeList'+number.toString(), cacheArray);
   return cacheArray;
 }

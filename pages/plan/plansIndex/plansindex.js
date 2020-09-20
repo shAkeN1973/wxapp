@@ -13,9 +13,7 @@ Page({
     console.log(this.data.renderingArray);
     var numberArray=wx.getStorageSync('nmsl');//获得缓存中储存的数组元素
     toolNumberArray=numberArray;
-    console.log(numberArray);
     var today=util.formatTime(new Date());  //获得今天的日期
-    console.log(today,typeof(today));
     var that=this;
     var toolArray = new Array();                           //将渲染数组进行动态显示
     // var toolPlan2=[],       //赋值渲染数组2
