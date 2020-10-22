@@ -107,3 +107,5 @@
 </view>
 <canvas class="chartTry" canvas-id="test" binderror="canvasIdErrorCallback">
 </canvas>
+
+<button bindtap="getUserInfoCloud">click me!!!</button>

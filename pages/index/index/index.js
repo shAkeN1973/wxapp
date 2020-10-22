@@ -184,6 +184,7 @@ Page({
 
 
   onLoad: function () {
+    console.log(app.globalData.userInfo);
     this.showTemperature();
     this.initialization();          //调用设置缓存函数，保证不用手动添加
     this.drawCanvas();              //调用画布函数
@@ -227,6 +228,17 @@ Page({
     this.setData({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
+    })
+  },
+  
+
+  getUserInfoCloud(){
+    var that=this;
+    wx.cloud.callFunction({
+      name:'getOpenID',
+      success:res=>{
+        console.log("获取的openID",res.result);
+      }
     })
   },
   
