@@ -5,13 +5,17 @@
 /* 12:00 | amoxicillin |  yes  |*/
 /*       | Penicillin  |  yes  |*/
 /* 13:00 | Gentamicin  |  no   |*/
-const app = getApp()
+const app = getApp();
+const db=wx.cloud.database({
+  env:"test-0tr93",
+});
 import mqtt from '../../library/mqtt.js';
+
 var util = require('../../utils/util.js');
 
 Page({
   data: {
-    userInfo: {},
+    userInfo: null,
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     showArray:null,
@@ -28,6 +32,10 @@ Page({
 
 
   onLoad: function () {
+    console.log(this.data.userInfo.nickName)
+    if(this.data.userInfo){
+      testDataBase(this.data.userInfo.nickName);  //数据库查询
+    }
     var today = speretTime(util.formatTime(new Date()),null,"today");  //获得今天的日期
     var involveTodayPlanArray=deletPlanNotInvolveToday(returnPlanArray(),today);//获得已经筛选过的日期数组
     var showArray=['时间','药名','是否服药'];
@@ -109,6 +117,7 @@ Page({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
+    this.onLoad();
   },
 
 })
@@ -225,4 +234,13 @@ function arrangeColour(legenth){            // 表格颜色的确定
   }
   else
   return null;
+}
+
+
+function testDataBase(nickName){
+  db.collection('user').where({
+    _id:'shAkeN'
+  }).get().then(res=>{
+    console.log(res);
+  })
 }

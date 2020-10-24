@@ -184,7 +184,7 @@ Page({
 
 
   onLoad: function () {
-    console.log(app.globalData.userInfo);
+    console.log('hello world')
     this.showTemperature();
     this.initialization();          //调用设置缓存函数，保证不用手动添加
     this.drawCanvas();              //调用画布函数
@@ -222,7 +222,7 @@ Page({
     }
   },
   
-  getUserInfo: function(e) {
+  getUserInfo: function(e) {   //云函数开♂fa
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
