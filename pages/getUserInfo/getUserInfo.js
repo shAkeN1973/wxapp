@@ -9,7 +9,7 @@ const app = getApp();
 const db=wx.cloud.database({
   env:"test-0tr93",
 });
-import mqtt from '../../library/mqtt.js';
+
 
 var util = require('../../utils/util.js');
 
@@ -32,7 +32,6 @@ Page({
 
 
   onLoad: function () {
-    console.log(this.data.userInfo.nickName)
     if(this.data.userInfo){
       testDataBase(this.data.userInfo.nickName);  //数据库查询
     }
@@ -119,6 +118,13 @@ Page({
     })
     this.onLoad();
   },
+
+  goToDebug:function(){
+    console.log('navigateto function is working')
+    wx.navigateTo({
+      url:"../index/debugTest/debugTest"
+    })
+  }
 
 })
 

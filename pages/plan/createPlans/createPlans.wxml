@@ -69,6 +69,6 @@
 	</view>
 	</block>
 
-  <view class="padding flex flex-direction">
+<view class="padding flex flex-direction">
   <button class="cu-btn bg-red margin-tb-sm lg" bindtap="SM">提交</button>
 </view>

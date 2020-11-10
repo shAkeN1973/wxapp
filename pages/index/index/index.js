@@ -232,7 +232,7 @@ Page({
   },
   
 
-  getUserInfoCloud(){
+  getUserInfoCloud(){   //云函数能力获取
     var that=this;
     wx.cloud.callFunction({
       name:'getOpenID',
