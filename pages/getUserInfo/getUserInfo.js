@@ -5,7 +5,7 @@
 /* 12:00 | amoxicillin |  yes  |*/
 /*       | Penicillin  |  yes  |*/
 /* 13:00 | Gentamicin  |  no   |*/
-const app = getApp();
+var app = getApp();
 const db=wx.cloud.database({
   env:"test-0tr93",
 });
@@ -32,6 +32,7 @@ Page({
 
 
   onLoad: function () {
+    console.log(app.globalData.userInfo)
     if(this.data.userInfo){
       testDataBase(this.data.userInfo.nickName);  //数据库查询
     }

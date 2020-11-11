@@ -53,7 +53,15 @@ Page({
       console.log("starting debuging...");
       client.subscribe('start',function(err){
         if(!err){
-          client.publish('start',that.data.selectNumber)
+          console.log("publishing the data：",that.data.selectNumber)
+          client.publish('start',that.data.selectNumber,function(err){
+            if(err){
+              console.log("err message:",err)
+            }
+            else{
+              console.log("publish done")
+            }
+          })
         }
       })
       }

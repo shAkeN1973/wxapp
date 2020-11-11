@@ -27,6 +27,9 @@ App({
       env:"test-0tr93",
       traceUser:true
     })
+    const db=wx.cloud.database({
+      env:"test-0tr93"
+    })
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -47,7 +50,7 @@ App({
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
       }
     })
-    // 获取用户信息
+    // 获取用户信息，并校验用户的openId与数据库中储存的openID是否匹配，若不匹配则增加新的字段
     wx.getSetting({
       success: res => {
         if (res.authSetting['scope.userInfo']) {
@@ -56,12 +59,25 @@ App({
             success: res => {
               // 可以将 res 发送给后台解码出 unionId
               this.globalData.userInfo = res.userInfo
-
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况
               if (this.userInfoReadyCallback) {
                 this.userInfoReadyCallback(res)
               }
+
+
+              let openid=123;
+              let fuckPromise=new Promise((resolve)=>{
+                wx.cloud.callFunction({
+                  name:'getOpenID',
+                }).then((res)=>{
+                  openid=res.result.openid;
+                }).then(()=>{
+                  console.log(openid)
+                })
+                resolve();
+              })
+        
             }
           })
         }
@@ -105,3 +121,14 @@ function randomString(len) {
   }
   return pwd;
 }
+/** 
+ * 对nickName进行查询操作
+*/
+
+function testCloudOpenId(nickName){   
+
+}
+
+/**
+ * 获取用户openID
+ */
