@@ -128,7 +128,3 @@ function randomString(len) {
 function testCloudOpenId(nickName){   
 
 }
-
-/**
- * 获取用户openID
- */

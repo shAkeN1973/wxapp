@@ -58,7 +58,29 @@ Page({
     timeChanger:[],
     numberArray:[],
     changeTempVar:false,
-    MName:null
+    MName:null,
+    M2N:[
+    {
+      Oname:"盐酸索他洛尔",
+      Eng:"SOT"
+    },
+    {
+      Oname:"美托洛尔",
+      Eng:"MET"
+    },
+    {
+      Oname:"卡维地洛",
+      Eng:"CAR"
+    },   
+    {
+      Oname:"卡托普利",
+      Eng:"CAP"
+    },
+    {
+      Oname:"金捷妥",
+      Eng:"GEN"
+    }
+      ]
   },
 
   recordStart(){
@@ -270,17 +292,30 @@ dateCaculator(plans,upLoadPlans)   //计算日期数组
   }
 },
 
+/**
+ * 2020/11/12 在此函数内将原先上传的字符串的前四位提取出来上传，取消原先有分隔符的设定
+ * 
+ */
+
 
 upLoad(upLoadPlans){
     // var newJson = JSON.stringify(upLoadPlans); //数组转json字符串
-    var newJson=upLoadPlans.number.toString()+"N"+upLoadPlans.name.toString()+"T"+this.timeArry()+"A";
+    let changedName=changeMname(upLoadPlans.name,this.data.M2N);
+    var newJson=null;
+    if(changedName!=404){
+      newJson=upLoadPlans.number.toString()+changedName+"T"+this.timeArry()+"A";
+    }
+    else{
+    newJson=upLoadPlans.number.toString()+upLoadPlans.name.toString()+"T"+this.timeArry()+"A";
+    }
     var that = this;
     that.data.client = app.globalData.client;
+    var stringUpdate = newJson.substring(0,4);   //上传的字符串
     that.data.client.on('connect', e => {
       console.log("药物上传连接成功");
-      that.data.client.subscribe('SW_LED', function (err) {
+      that.data.client.subscribe('name', function (err) {
         if (!err) {
-          that.data.client.publish('SW_LED', newJson)
+          that.data.client.publish('name', stringUpdate)
         }
       })
     });
@@ -396,25 +431,6 @@ refresh(plans){     //plans 按值传递
        delta: 1,
      })
     }
-    
-    // wx.showModal({
-    //   title: '提示',
-    //   content: '这是一个模态弹窗',
-    //   success (res) {
-    //     if (res.confirm) {
-    //     console.log('用户点击确定')
-    //   } 
-    //   else if (res.cancel) {
-    //     console.log('用户点击取消')
-    //   }
-    //   }
-    // })
-
-    // wx.showToast({
-    //   title: '成功',
-    //   icon:'success',
-    //   duration:2000
-    // })
   },
 
   onUnload: function () {
@@ -589,4 +605,18 @@ function testAllFilled(upLoadPlans){
   return null;
   else
   return errorMessage;
+}
+
+/**
+ * 该函数将传入的药名与程序内的药名数组对比，并返回药名英文的前三个英文字母
+ * 若未找到则返回404
+ */
+
+function changeMname(medcineName,M2N){
+  for(var i=0;i<M2N.length;i++){
+    if(medcineName==M2N[i].Oname){
+      return M2N[i].Eng;
+    }
+  }
+  return 404
 }

@@ -39,8 +39,14 @@ Page({
 
 
   selectRoom(e){   //选择药仓编号
+    
     this.setData({
       selectNumber:e.currentTarget.id
+    })
+    client.publish('start',e.currentTarget.id,(err)=>{
+      if(!err){
+        console.log("publish the first data:",e.currentTarget.id);
+      }
     })
   },
 
@@ -54,7 +60,7 @@ Page({
       client.subscribe('start',function(err){
         if(!err){
           console.log("publishing the data：",that.data.selectNumber)
-          client.publish('start',that.data.selectNumber,function(err){
+          client.publish('start',"start",function(err){
             if(err){
               console.log("err message:",err)
             }
