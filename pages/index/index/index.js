@@ -184,7 +184,6 @@ Page({
 
 
   onLoad: function () {
-    console.log('hello world')
     this.showTemperature();
     this.initialization();          //调用设置缓存函数，保证不用手动添加
     this.drawCanvas();              //调用画布函数

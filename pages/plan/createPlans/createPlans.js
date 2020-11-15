@@ -10,7 +10,8 @@
  *      -upLoadArray
  *
 */
-const app = getApp();
+var app = getApp();
+     //设置数据库引用
 var util = require('../../../utils/util.js');
 // var upLoadArray=new Array();           //不确定哪里会用到，所以先注释了
 var plugin = requirePlugin("WechatSI")
@@ -59,6 +60,7 @@ Page({
     numberArray:[],
     changeTempVar:false,
     MName:null,
+    nmsl:null,
     M2N:[
     {
       Oname:"盐酸索他洛尔",
@@ -241,6 +243,9 @@ getStorageSlef:function(){         //只有在输入药物名称的时候才可�
               key: "nmsl",
               data: res.data,
             });
+            that.setData({
+              nmsl:res.data,
+            })
           }
           catch (e) {
             console.log(e);
@@ -422,14 +427,34 @@ refresh(plans){     //plans 按值传递
       })
     }
     else{
+      var db=wx.cloud.database({
+        env:"test-0tr93"
+      })   
+      var nickName=app.globalData.userInfo.nickName;
+      var planArray=null;
+      db.collection('userPlans').doc(app.globalData.userInfo.nickName).get({
+        success:res=>{
+          planArray=res.data.planArray;
+          planArray[upLoadPlans.number-1]=upLoadPlans;
+          db.collection('userPlans').doc(app.globalData.userInfo.nickName).update({
+            data:{
+              nmsl:this.data.nmsl,
+              planArray:planArray
+            },
+            success:()=>{
+              console.log("nmsl数组更新成功")
+            }
+          })
+        }
+      })
       wx.setStorage({
           key: upLoadPlans.number.toString(),
           data: upLoadPlans,
         });
       this.upLoad(upLoadPlans);
-     wx.navigateBack({
-       delta: 1,
-     })
+    //  wx.navigateBack({
+    //    delta: 1,
+    //  })
     }
   },
 

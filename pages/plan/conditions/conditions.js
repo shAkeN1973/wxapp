@@ -119,7 +119,6 @@ Page({
     for (let i = 0; i < this.data.dateArray.length;i++)
     {
       var toolDate = this.date2(this.data.dateArray[i]);
-      console.log(toolDate.year)
       if (toolDate.year <=this.data.todayDate.year && toolDate.month <= this.data.todayDate.month && toolDate.day <= this.data.todayDate.day){
         var str = parseInt(((i + 1) / this.data.dateArray.length) * 100);
         var str2 = str.toString() + "%"
@@ -191,14 +190,15 @@ Page({
     else{                                      //已经存药，进行服药的反馈监视
       var that = this;
       that.data.client = app.globalData.client;
-      that.data.client.subscribe('admitTest',function(err){if(!err){console.log('反馈主题订阅成功')}})
+      that.data.client.subscribe('Fankui',function(err){if(!err){console.log('反馈主题订阅成功')}})
       that.data.client.on('message',function (topic,message) {
       var exp2=new RegExp('[0-9]{2}:[0-9]{2}:[0-9]{2}','g')
       // var testMessage=exp2.test(message.toString());
       var abc=exp2.exec(message.toString());
-      console.log(abc,message.toString())
+      if(abc){
+      console.log(abc,message.toString())}
 
-      if(abc&&topic=='admitTest'){
+      if(abc&&topic=='Fankui'){
         // console.log('fuck',abc)
         var eatDrugTime=abc[0];  //eatdrugTime从本地发送过来的服药时间
         var diffResult=ifFeedBackOK(spereteTimerHourMinute(eatDrugTime),that.data.timer) //比较发送的时间和page中的timer确定时间段
@@ -208,7 +208,7 @@ Page({
             currentTimeList=setCache(that.data.timer,that.data.dateArray,that.data.number);
           }
           for(let i=0;i<currentTimeList.length;i++){        //则对缓存中的当前服药数组进行更改
-            // console.log((that.date2(currentTimeList[i][0])).day)
+            console.log((that.date2(currentTimeList[i][0])).day)
             if(that.data.todayDate.day==(that.date2(currentTimeList[i][0])).day){
               currentTimeList[i][diffResult.index+1].time=eatDrugTime;
               diffResult.TorF?currentTimeList[i][diffResult.index+1].inTime=true:currentTimeList[i][diffResult.index+1].inTime=false;
@@ -290,7 +290,7 @@ Page({
     }
     todayDate.year = parseInt(today.substring(0, 4));
     todayDate.month = parseInt(today.substring(5, 7));
-    todayDate.day = parseInt(today.substring(7, 9));
+    todayDate.day = parseInt(today.substring(8, 10));
     todayDate.hour = parseInt(today.substring(11, 13));
     todayDate.minute = parseInt(today.substring(14, 17));
     return todayDate;

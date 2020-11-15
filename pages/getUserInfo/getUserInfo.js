@@ -33,9 +33,6 @@ Page({
 
   onLoad: function () {
     console.log(app.globalData.userInfo)
-    if(this.data.userInfo){
-      testDataBase(this.data.userInfo.nickName);  //数据库查询
-    }
     var today = speretTime(util.formatTime(new Date()),null,"today");  //获得今天的日期
     var involveTodayPlanArray=deletPlanNotInvolveToday(returnPlanArray(),today);//获得已经筛选过的日期数组
     var showArray=['时间','药名','是否服药'];
@@ -136,7 +133,7 @@ function speretTime(date,time,mood) {          //分开时间返回整形数
       return {
         year : parseInt(date.substring(0, 4)),
         month : parseInt(date.substring(5, 7)),
-        day : parseInt(date.substring(7, 9)),
+        day : parseInt(date.substring(8, 10)),
       }
       case "time":{
         return {
@@ -163,7 +160,7 @@ function speretTime(date,time,mood) {          //分开时间返回整形数
 function returnPlanArray() {   //返回获得的数组
   var planArray=new Array();
   for(let i=1;i<=5;i++){
-    var Plan=wx.getStorageSync(i.toString())
+    var Plan=wx.getStorageSync(i.toString());
     if(Plan){
       planArray.push(Plan);
     }
@@ -177,6 +174,7 @@ function deletPlanNotInvolveToday(planArray,today){       //剔除掉那些包�
     var involeTodayPlanArray=new Array()
     for(let i=0;i<planArray.length;i++){
       for(let j=0;j<planArray[i].dateArray.length;j++){
+        console.log(speretTime(planArray[i].dateArray[j],null,"date"));
         if(today.day==speretTime(planArray[i].dateArray[j],null,"date").day){
           involeTodayPlanArray.push(planArray[i]);
           break;
@@ -244,10 +242,4 @@ function arrangeColour(legenth){            // 表格颜色的确定
 }
 
 
-function testDataBase(nickName){
-  db.collection('user').where({
-    _id:'shAkeN'
-  }).get().then(res=>{
-    console.log(res);
-  })
-}
+

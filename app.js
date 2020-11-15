@@ -1,4 +1,10 @@
 //app.js
+
+wx.cloud.init({  //初始调用云函数
+  env:"test-0tr93",
+  traceUser:true
+})
+
 import mqtt from './library/mqtt.js';
 
 const host =
@@ -19,17 +25,17 @@ App({
     userInfo: null,
     client_ID: options.clientId,
     client: mqtt.connect(host, options),
-    CONNECT:true
+    CONNECT:true,
+    db:wx.cloud.database({
+      env:"test-0tr93"
+    })
   },
 
   onLaunch: function () {
-    wx.cloud.init({
-      env:"test-0tr93",
-      traceUser:true
-    })
-    const db=wx.cloud.database({
-      env:"test-0tr93"
-    })
+    var that=this;
+
+ 
+
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -64,20 +70,18 @@ App({
               if (this.userInfoReadyCallback) {
                 this.userInfoReadyCallback(res)
               }
-
-
               let openid=123;
-              let fuckPromise=new Promise((resolve)=>{
+              let fuckPromise=new Promise((resolve)=>{   //promise风格
                 wx.cloud.callFunction({
                   name:'getOpenID',
                 }).then((res)=>{
                   openid=res.result.openid;
                 }).then(()=>{
-                  console.log(openid)
+                  testCloudOpenId(that.globalData.userInfo.nickName,that.globalData.db,openid);  //测试有无此用户
+                  testStroage(that.globalData.db,that.globalData.userInfo.nickName);// 测试缓存里有无该用户的信息
                 })
                 resolve();
               })
-        
             }
           })
         }
@@ -122,9 +126,65 @@ function randomString(len) {
   return pwd;
 }
 /** 
- * 对nickName进行查询操作
+ * 对nickName进行查询操作，若未查询到相应字段，则进行字段补全操作
 */
 
-function testCloudOpenId(nickName){   
+function testCloudOpenId(nickName,db,openid){   
+  db.collection('user').doc(nickName).get({
+    success:res=>{
+      if(openid==res.data.openid){
+        return 1;
+      }
+      else{
+        db.collection('user').doc(nickName).update({    //回调..
+          data:{
+            openid:openid
+          },
+          success:res=>{
+            console.log("update success");
+          }
+        })
+      }
+    },
+    fail:res=>{
+      db.collection('user').add({
+        data:{
+          _id:nickName,
+          openid:openid
+        },
+        success:()=>{
+          console.log("success add")
+        }
+      });
+      emptyPlanArray=new Array(8);
+      db.collection('userPlan').doc(nickName).update({
+        data:{
+          planArray:emptyPlanArray
+        }
+      })
+    }
+  })
+}
+
+/**
+ * 
+ * @param {database} db  
+ * @param {string} nickName 
+ */
+
+function testStroage(db,nickName){
+  db.collection('userPlans').doc(nickName).get({
+    success:(res)=>{
+    wx.setStorageSync('nmsl', res.data.nmsl);
+    for(var i=0;i<res.data.planArray.length;i++){
+      if(res.data.planArray[i]!=null){
+      wx.setStorageSync((i+1).toString(),res.data.planArray[i]);
+      }
+    }
+    },
+    fail:()=>{
+      console.log("没有此用户的数据")
+    }
+  });
 
 }
