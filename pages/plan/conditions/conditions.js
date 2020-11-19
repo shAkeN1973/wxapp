@@ -3,7 +3,8 @@
 
 
 
-const app = getApp();
+var app = getApp();
+var db = app.globalData.db;
 import mqtt from '../../../library/mqtt.js';
 var util = require('../../../utils/util.js');
 var wxChart = require('./../../../utils/wxcharts.js');   //这里引入折线图组件
@@ -59,8 +60,7 @@ Page({
 
 
   detail:function(e){         //显示当天的服药时间
-    var obj=this.data.dateArray;
-    console.log(this.data.feedbacktimeList)
+    var obj=this.data.dateArray;    //获取日期数组
     if(!this.data.feedbacktimeList){
       var cacheList=wx.getStorageSync('timeList'+this.data.number.toString())
       this.setData({
@@ -70,32 +70,27 @@ Page({
       this.setData({
         str:'还未开始服药，请在服药后查看服药时间！'
       })
-      if(this.data.feedbacktimeList instanceof Array)
+      if(this.data.feedbacktimeList instanceof Array){
         for(let i=0;i<obj.length;i++){
-          if (obj[i] == e.currentTarget.id&&(this.date2(e.currentTarget.id)).day==this.data.todayDate.day)
-          {
+          if (this.data.feedbacktimeList[i][0] == e.currentTarget.id)
+          {          
             var list=[]
             for(let j=1;j<this.data.timer.length+1;j++){
               list.push(this.data.feedbacktimeList[i][j])
             }
-            if(list[0].time){
+            console.log("list:",list)
             this.setData({
               timerToShow:list,
               saveOK:true
-            })}
-            else{
-              this.setData({
-                str:'还未开始服药，请在服药后查看服药时间！',
-              })
-            }
+            })
             break;
           }
         }
-    console.log(this.data.timerToShow)
+      }
     this.setData({
       saveOK:true,
       showDrugTime:true
-    })
+    });
   },
 
 
@@ -153,6 +148,20 @@ Page({
       }
     );
 
+    // var cloudFeedBackList=[];
+    // for(let i=0;i<8;i++){
+    //   var arr1=[];
+    //   for(let j=0;j<this.data.dateArray.length;i++){
+    //     var arr2=[];
+    //     for(let k=0;k<this.data.timer.length+1;k++){
+    //       arr2.push(null);
+    //     }
+    //     arr1.push(arr2);
+    //   }
+    //   cloudFeedBackList.push(arr1);
+    // }
+  
+
     if (!toolPlan.start){ //如果缓存中start值为假，则进行mqtt传输测试,这里是为了在机器上操作后没有在小程序上操作
       var that = this;
       that.data.client = app.globalData.client;
@@ -208,7 +217,6 @@ Page({
             currentTimeList=setCache(that.data.timer,that.data.dateArray,that.data.number);
           }
           for(let i=0;i<currentTimeList.length;i++){        //则对缓存中的当前服药数组进行更改
-            console.log((that.date2(currentTimeList[i][0])).day)
             if(that.data.todayDate.day==(that.date2(currentTimeList[i][0])).day){
               currentTimeList[i][diffResult.index+1].time=eatDrugTime;
               diffResult.TorF?currentTimeList[i][diffResult.index+1].inTime=true:currentTimeList[i][diffResult.index+1].inTime=false;
@@ -220,6 +228,29 @@ Page({
               break;
             }
           }
+          db.collection('userPlans').doc(app.globalData.userInfo.nickName).get({
+           success:res=>{
+            let timeList1=res.data.timeList;
+            timeList1[that.data.number-1]=currentTimeList;
+            db.collection('userPlans').doc(app.globalData.userInfo.nickName).update({
+              data:{
+                timeList:timeList1
+              },
+              success:()=>{
+                console.log("更新云反馈数组成功");
+              }
+            })
+           }
+          })
+          // cloudFeedBackList[this.data.number-1]=currentTimeList;
+          // db.collection('userPlans').doc(app.globalData.userInfo.nickName).update({   //update the cloud feedbacktimeList
+          //   data:{
+          //     cloudFeedBackList:cloudFeedBackList,
+          //   },
+          //   success:res=>{
+          //     console.log("update feedbacktimeList successfully");
+          //   }
+          // })
           that.setData({
             timerToShow:showList,
             feedbacktimeList:currentTimeList
@@ -229,11 +260,7 @@ Page({
           console.log('--------------！！！反馈时间错误！！！-------------')
         }
       }
-      //that.data.client.end();//结束监听！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
       })
-
-
-
       this.setData({
         showLoading: false,
         showAll: true
@@ -306,7 +333,7 @@ Page({
       content:'确定删除此计划？',
       success(res){
         if(res.confirm){
-          roomArrayStorage[that.data.number-1]=null;
+          roomArrayStorage[that.data.number-1]=null;//进行本地缓存的清除...
           wx.setStorage({
             key: 'nmsl',
             data:roomArrayStorage,
@@ -314,6 +341,29 @@ Page({
           wx.removeStorage({
             key: that.data.number.toString(),
           })
+          db.collection('userPlans').doc(app.globalData.userInfo.nickName).get(
+           {
+            success:res=>{
+              let planArray1=res.data.planArray;
+              planArray1[that.data.number-1]=null;
+              let nmsl1=res.data.nmsl;
+              nmsl1[that.data.number-1]=null;
+              db.collection('userPlans').doc(app.globalData.userInfo.nickName).update({
+                data:{
+                  nmsl:nmsl1,
+                  planArray:planArray1
+                },
+                success:()=>{
+                  console.log("云函数删除成功")
+                }
+              })
+            fail:()=>{
+              console.log("云函数更新失败")
+            }
+            }
+           }
+          )
+
           wx.showToast({
             title: '缓存清除成功！',
             icon:'success',

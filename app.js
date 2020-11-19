@@ -177,10 +177,14 @@ function testStroage(db,nickName){
     success:(res)=>{
     wx.setStorageSync('nmsl', res.data.nmsl);
     for(var i=0;i<res.data.planArray.length;i++){
-      if(res.data.planArray[i]!=null){
+      if(res.data.planArray[i]!=null){s
       wx.setStorageSync((i+1).toString(),res.data.planArray[i]);
       }
+      if(res.data.timeList[i]!=null){    //cloudFeedBackList 3 dim array
+      wx.setStorageSync("timeList"+(i+1).toString(), res.data.timeList[i]);
+      }
     }
+
     },
     fail:()=>{
       console.log("没有此用户的数据")
