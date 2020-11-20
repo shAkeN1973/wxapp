@@ -81,6 +81,10 @@ Page({
     {
       Oname:"金捷妥",
       Eng:"GEN"
+    },
+    {
+      Oname:"特拉唑嗪",
+      Eng:"TER"
     }
       ]
   },

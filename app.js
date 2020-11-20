@@ -177,7 +177,7 @@ function testStroage(db,nickName){
     success:(res)=>{
     wx.setStorageSync('nmsl', res.data.nmsl);
     for(var i=0;i<res.data.planArray.length;i++){
-      if(res.data.planArray[i]!=null){s
+      if(res.data.planArray[i]!=null){
       wx.setStorageSync((i+1).toString(),res.data.planArray[i]);
       }
       if(res.data.timeList[i]!=null){    //cloudFeedBackList 3 dim array

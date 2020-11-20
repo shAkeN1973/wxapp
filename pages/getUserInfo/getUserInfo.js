@@ -32,7 +32,6 @@ Page({
 
 
   onLoad: function () {
-    console.log(app.globalData.userInfo)
     var today = speretTime(util.formatTime(new Date()),null,"today");  //获得今天的日期
     var involveTodayPlanArray=deletPlanNotInvolveToday(returnPlanArray(),today);//获得已经筛选过的日期数组
     var showArray=['时间','药名','是否服药'];
@@ -43,7 +42,7 @@ Page({
       })
     }
     else{
-      var timeSortArray=getSortedTimeArray(involveTodayPlanArray);
+      var timeSortArray=getSortedTimeArray(involveTodayPlanArray);  //获取排好序的时间数组
       if(timeSortArray){
         for(let i=0;i<timeSortArray.length;i++){      //遍历时间数组
           if(timeSortArray[i]==timeSortArray[i-1])
@@ -72,7 +71,15 @@ Page({
         }
       }
     }
-    console.log(showArray)
+    console.log(showArray);
+    
+
+    //有可能的话在这里写个循环
+    // let timeList=wx.getStorageSync('timeList1');
+    
+    
+    
+
     
     this.setData({
       showArray:showArray,

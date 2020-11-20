@@ -402,13 +402,13 @@ Page({
 function ifFeedBackOK(currentTime,settedTimer) {
   for(let i=0;i<settedTimer.length;i++){
     var diffTime=timeDiff(currentTime,spereteTimerHourMinute(settedTimer[i]))
-    if(diffTime<=30&&diffTime>=0){
+    if(diffTime<=150&&diffTime>=0){
       return  {
         index:i,
         TorF:true
       }
     }
-    else if(diffTime>=0&&diffTime<=120){
+    else if(diffTime>=0&&diffTime<=180){
       return {
         index:i,
         TorF:false
