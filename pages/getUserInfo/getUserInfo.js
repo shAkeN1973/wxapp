@@ -10,7 +10,6 @@ const db=wx.cloud.database({
   env:"test-0tr93",
 });
 
-
 var util = require('../../utils/util.js');
 
 Page({
@@ -71,12 +70,32 @@ Page({
         }
       }
     }
-    console.log(showArray);
-    
-
+    // console.log(showArray);
     //有可能的话在这里写个循环
-    // let timeList=wx.getStorageSync('timeList1');
-    
+  
+      let timeList=wx.getStorageSync('timeList1');
+      let timeListToday=null;
+      for(let m=0;m<timeList.length;m++){
+        let dayFuckMe=speretTime(timeList[m][0],null,"date");
+        if(dayFuckMe.day==today.day){
+          timeListToday=timeList[m];
+        }
+      }
+      console.log(timeListToday);
+      let plan=wx.getStorageSync('1');
+      for(let i=0;i<showArray.length;i++){
+        let j=1;
+        if(showArray[i]==plan.name){
+          if(showArray[i+1]=="已服药"&&timeListToday[j].time!=null){
+            console.log(showArray[i]);
+              j++;
+          }
+          else if(showArray[i+1]=="已服药"&&timeListToday[j].time==null){
+            showArray[i+1]="未服药"
+          }
+        }
+      }
+
     
     
 
@@ -181,7 +200,6 @@ function deletPlanNotInvolveToday(planArray,today){       //剔除掉那些包�
     var involeTodayPlanArray=new Array()
     for(let i=0;i<planArray.length;i++){
       for(let j=0;j<planArray[i].dateArray.length;j++){
-        console.log(speretTime(planArray[i].dateArray[j],null,"date"));
         if(today.day==speretTime(planArray[i].dateArray[j],null,"date").day){
           involeTodayPlanArray.push(planArray[i]);
           break;
@@ -230,7 +248,6 @@ function getSortedTimeArray(planArray) {     //返回排好序的时间数组
     timeArray[i]=hourString+":"+minuteString;
   }
   tool=null;
-  console.log(timeArray);
   hourString=null;
   minuteString=null;
   return timeArray
