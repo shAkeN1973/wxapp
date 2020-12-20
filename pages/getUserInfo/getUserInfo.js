@@ -70,9 +70,12 @@ Page({
         }
       }
     }
-    // console.log(showArray);
+    console.log(showArray);
     //有可能的话在这里写个循环
-  
+    /**
+     * 由于时间原因，在这里的逻辑有点问题，应该要写几个循环匹配的，这个问题之后有机会再改吧
+     */
+    try{
       let timeList=wx.getStorageSync('timeList1');
       let timeListToday=null;
       for(let m=0;m<timeList.length;m++){
@@ -88,14 +91,20 @@ Page({
         if(showArray[i]==plan.name){
           if(showArray[i+1]=="已服药"&&timeListToday[j].time!=null){
             console.log(showArray[i]);
-              j++;
+            j++;
           }
           else if(showArray[i+1]=="已服药"&&timeListToday[j].time==null){
-            showArray[i+1]="未服药"
+            console.log(showArray[i+1]);
+            showArray[i+1]="未服药";
+            j++;
           }
         }
       }
-
+    }
+    catch(e){
+      console.log(e);
+    }
+     
     
     
 
