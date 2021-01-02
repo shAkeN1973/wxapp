@@ -8,14 +8,15 @@ wx.cloud.init({  //初始调用云函数
 import mqtt from './library/mqtt.js';
 
 const host =
-'wxs://www.xjtuzhijiysx.cn/mqtt';
+'wxs://g7b47441.cn.emqx.cloud:8084/mqtt';
+// 'wxs://www.xjtuzhijiysx.cn/mqtt';
 const options = {
   protocolVersion: 4, //MQTT连接协议版本
   //clientId: randomString(10),
   clientId: "userShAkeN",
   clean: true,
-  //username: '1v1r5ep/zhihu_iamliubo',
-  //password: 'tNVKODyl2chbm5yp',
+  username: 'XJTU',
+  password: '123',
   reconnectPeriod: 1000,
   connectTimeout: 30 * 1000,
   resubscribe: true
